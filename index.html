@@ -502,6 +502,44 @@ a { color: var(--teal); text-decoration: none; }
   .nav .btn { display: none; }
 }
 
+/* ============ Touch devices: swap hover animations for tap feedback ============ */
+/* Real phones report (hover: none)/(pointer: coarse); without this, tapping
+   a card or button can trigger :hover with no mouse to ever "unhover" it,
+   leaving lifted/scaled elements stuck mid-animation. */
+@media (hover: none), (pointer: coarse) {
+  .btn:hover { transform: none; }
+  .btn:active { transform: scale(0.96); }
+
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { right: 100%; }
+
+  .card:hover { transform: none; box-shadow: none; }
+  .card:hover::before { transform: scaleX(0); }
+  .card:hover .card-icon { transform: none; }
+  .card:active { transform: scale(0.98); box-shadow: var(--shadow); }
+  .card:active::before { transform: scaleX(1); }
+  .card:active .card-icon { transform: scale(1.1) rotate(-3deg); }
+
+  .mini-card:hover { transform: none; box-shadow: none; }
+  .mini-card:active { transform: scale(0.98); box-shadow: var(--shadow); }
+
+  .steps li:hover { transform: none; background: rgba(255, 255, 255, 0.05); }
+  .steps li:hover .step-num { transform: none; }
+  .steps li:active { transform: scale(0.98); background: rgba(255, 255, 255, 0.09); }
+  .steps li:active .step-num { transform: scale(1.08); }
+
+  .stat:hover { transform: none; }
+  .stat:active { transform: scale(0.98); }
+
+  .price-card:hover { transform: none; box-shadow: none; }
+  .price-card:active { transform: scale(0.98); box-shadow: var(--shadow); }
+  .price-featured:hover { transform: scale(1.03); }
+  .price-featured:active { transform: scale(1.01); }
+
+  .guard:hover { background: rgba(255, 255, 255, 0.05); transform: none; }
+  .guard:active { background: rgba(255, 255, 255, 0.1); transform: translateX(2px); }
+}
+
 /* ============ Reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
