@@ -1296,16 +1296,52 @@ try {
 }
 if (initial !== "en") setLanguage(initial);
 
-// Contact form (demo handler — connect to your CRM or form service before launch)
+// Contact form — submits to Supabase (contact_submissions table, insert-only via RLS)
+const SUPABASE_URL = "https://dxusxkvitwtdifpihrvv.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_6cv5tbFh9n6ETBfCBTMq-g_OU7nksxY";
+
 const form = document.querySelector(".contact-form");
 if (form) {
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!form.reportValidity()) return;
+
+    const submitBtn = form.querySelector('button[type="submit"]');
     const success = form.querySelector(".form-success");
-    success.hidden = false;
-    form.querySelector('button[type="submit"]').disabled = true;
-    success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const data = new FormData(form);
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_submissions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          name: data.get("name"),
+          practice: data.get("practice"),
+          email: data.get("email"),
+          specialty: data.get("specialty"),
+          message: data.get("message"),
+          language: document.documentElement.lang,
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed: " + res.status);
+
+      form.reset();
+      success.hidden = false;
+      success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } catch (err) {
+      submitBtn.disabled = false;
+      alert(
+        document.documentElement.lang === "es"
+          ? "Hubo un problema al enviar el formulario. Por favor escríbanos directamente a hello@carebridgehealth.marketing."
+          : "Something went wrong sending your request. Please email us directly at hello@carebridgehealth.marketing."
+      );
+    }
   });
 }
 
