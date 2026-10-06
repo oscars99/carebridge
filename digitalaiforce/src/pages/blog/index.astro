@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getPosts, postUrl } from '../../lib/blog';
+import { absoluteUrl, breadcrumbNode } from '../../lib/schema';
+
+const posts = await getPosts();
+const [featured, ...rest] = posts;
+const path = '/blog/';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path },
+];
+
+const blogNode = {
+  '@type': 'Blog',
+  '@id': `${absoluteUrl(path)}#blog`,
+  name: 'Digital AI Force Blog',
+  url: absoluteUrl(path),
+  publisher: { '@id': absoluteUrl('/#organization') },
+  blogPost: posts.map((p) => ({
+    '@type': 'BlogPosting',
+    headline: p.data.title,
+    url: absoluteUrl(postUrl(p)),
+    datePublished: p.data.pubDate.toISOString(),
+  })),
+};
+---
+
+<BaseLayout
+  title="Blog — Web Design, SEO & AI Tips for Small Businesses | Digital AI Force"
+  description="Practical, plain-English guides on websites, SEO, digital marketing and AI for small business owners. Actionable tips you can use today."
+  pageType="CollectionPage"
+  schema={[breadcrumbNode(path, crumbs), blogNode]}
+>
+  <PageHero
+    eyebrow="Insights"
+    title="Practical guides to grow your"
+    accent="business online"
+    intro="Plain-English advice on websites, SEO, marketing and AI — written for busy small business owners, not marketers."
+    crumbs={crumbs}
+  />
+
+  <section class="section" aria-label="Articles">
+    <div class="container">
+      {featured && <div class="posts posts--featured"><PostCard post={featured} featured /></div>}
+      {
+        rest.length > 0 && (
+          <div class="posts posts--rest">
+            {rest.map((post, i) => (
+              <PostCard post={post} index={i} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <CTABand
+    title="Rather have experts"
+    accent="handle it?"
+    text="We turn these best practices into results for your business — websites, SEO, marketing and AI automation, done for you."
+  />
+</BaseLayout>
+
+<style>
+  .posts {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  }
+
+  .posts--featured {
+    grid-template-columns: 1fr;
+    margin-bottom: 24px;
+  }
+</style>

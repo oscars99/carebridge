@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProcessSteps from '../../components/ProcessSteps.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTABand from '../../components/CTABand.astro';
+import Icon from '../../components/Icon.astro';
+import { services, serviceUrl, getService, type Service } from '../../data/services';
+import { breadcrumbNode, faqNode, serviceNode } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const path = serviceUrl(service.slug);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services/' },
+  { name: service.name, path },
+];
+const related = service.related.map((slug) => getService(slug)).filter((s): s is Service => Boolean(s));
+const quoteHref = `/contact/?service=${service.slug}`;
+---
+
+<BaseLayout
+  title={service.seo.title}
+  description={service.seo.description}
+  schema={[serviceNode(service.slug), breadcrumbNode(path, crumbs), faqNode(path, service.faqs)]}
+>
+  <PageHero eyebrow={service.hero.eyebrow} title={service.hero.title} accent={service.hero.accent} intro={service.hero.intro} crumbs={crumbs}>
+    <div class="btn-row svc-hero__ctas enter" style="--d: 4">
+      <a href={quoteHref} class="btn btn--primary btn--lg">Get a free quote <Icon name="arrow-right" class="icon--move" /></a>
+      <a href="/pricing/" class="btn btn--ghost btn--lg">See pricing</a>
+    </div>
+
+    <aside slot="aside" class="svc-card enter" style="--d: 3" aria-label={`${service.name} at a glance`}>
+      <span class="svc-card__icon"><Icon name={service.icon} size={30} strokeWidth={1.6} /></span>
+      <p class="svc-card__label">At a glance</p>
+      <ul class="svc-card__list" role="list">
+        {
+          service.hero.bullets.map((b) => (
+            <li>
+              <Icon name="circle-check" size={20} />
+              <span>{b}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="svc-card__price">
+        <Icon name="badge-dollar-sign" size={20} />
+        <span>{service.pricingNote}</span>
+      </div>
+    </aside>
+  </PageHero>
+
+  <section class="section" aria-labelledby="overview-title">
+    <div class="container split split--60-40 split--top">
+      <div class="svc-overview" data-reveal>
+        <p class="eyebrow">Why it matters</p>
+        <h2 id="overview-title">{service.overview.heading}</h2>
+        {service.overview.paragraphs.map((p) => <p class="svc-overview__p">{p}</p>)}
+        <ul class="chip-row mt-3" role="list" aria-label="Focus areas">
+          {service.highlights.map((h) => <li class="chip">{h}</li>)}
+        </ul>
+      </div>
+      <div class="svc-included card" data-reveal="scale">
+        <h3>What’s included</h3>
+        <ul class="check-list" role="list">
+          {service.deliverables.map((d) => <li>{d}</li>)}
+        </ul>
+        <a href={quoteHref} class="btn btn--primary btn--block mt-3">Get my free quote <Icon name="arrow-right" class="icon--move" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">
+          {service.name}, <span class="text-gradient">done right</span>
+        </h2>
+        <p class="lead">Everything you need to see real results — planned, built and managed by one accountable team.</p>
+      </div>
+      <div class="grid grid-3">
+        {
+          service.features.map((f, i) => (
+            <article class="card spotlight lift feature" data-reveal style={`--i: ${i % 3}`}>
+              <span class="icon-badge">
+                <Icon name={f.icon} />
+              </span>
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Our process</p>
+        <h2 id="process-title">{service.name}: <span class="text-gradient">how it works</span></h2>
+        <p class="lead">A clear, collaborative process — so you always know what’s happening and what comes next.</p>
+      </div>
+      <ProcessSteps steps={service.process} />
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="faq-title">
+    <div class="container split split--40-60 split--top">
+      <div class="section-head svc-faq-intro" data-reveal>
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title">{service.name} <span class="text-gradient">questions</span></h2>
+        <p class="lead">Straight answers to what small business owners ask us most. Don’t see yours?</p>
+        <a href={quoteHref} class="link-arrow mt-3">Ask us directly <Icon name="arrow-right" /></a>
+      </div>
+      <FAQ faqs={service.faqs} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="related-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">Pairs well with</p>
+          <h2 id="related-title">Grow faster with <span class="text-gradient">related services</span></h2>
+        </div>
+        <a href="/services/" class="link-arrow" data-reveal>View all services <Icon name="arrow-right" /></a>
+      </div>
+      <div class="grid grid-3">
+        {
+          related.map((r, i) => (
+            <article class="card spotlight lift related" data-reveal style={`--i: ${i}`}>
+              <span class="icon-badge">
+                <Icon name={r.icon} />
+              </span>
+              <h3>
+                <a href={serviceUrl(r.slug)} class="stretched-link">
+                  {r.name}
+                </a>
+              </h3>
+              <p>{r.summary}</p>
+              <span class="link-arrow related__more" aria-hidden="true">
+                Learn more <Icon name="arrow-right" />
+              </span>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTABand
+    title="Ready to get started with"
+    accent={`${service.name}?`}
+    text="Get a free strategy call and a fixed, written quote. No pressure, no jargon — just a clear plan to grow your business."
+    primaryHref={quoteHref}
+    primaryLabel="Get a free quote"
+  />
+</BaseLayout>
+
+<style>
+  .svc-hero__ctas {
+    margin-top: 32px;
+  }
+
+  .svc-card {
+    position: relative;
+    padding: 28px;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+  }
+
+  .svc-card__icon {
+    position: absolute;
+    top: -22px;
+    right: 24px;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    color: #fff;
+    background: var(--grad-brand);
+    box-shadow: 0 16px 36px -12px rgba(91, 61, 245, 0.8);
+    animation: float 6s var(--ease-in-out) infinite;
+  }
+
+  .svc-card__label {
+    margin-bottom: 16px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--violet-300);
+  }
+
+  .svc-card__list {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .svc-card__list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--on-night);
+  }
+
+  .svc-card__list :global(.icon) {
+    flex: none;
+    color: var(--success-on-dark);
+  }
+
+  .svc-card__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .svc-card__price :global(.icon) {
+    color: var(--cyan-400);
+  }
+
+  .svc-overview h2 {
+    margin-bottom: 1.2rem;
+  }
+
+  .svc-overview__p {
+    color: var(--text-muted);
+    font-size: 1.08rem;
+    max-width: 62ch;
+  }
+
+  .svc-overview__p + .svc-overview__p {
+    margin-top: 1rem;
+  }
+
+  .svc-included h3 {
+    margin-bottom: 1.2rem;
+  }
+
+  @media (min-width: 960px) {
+    .svc-included {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+
+    .svc-faq-intro {
+      position: sticky;
+      top: calc(var(--header-h) + 32px);
+    }
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .feature h3,
+  .related h3 {
+    margin: 4px 0 0;
+  }
+
+  .related {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .related__more {
+    margin-top: auto;
+  }
+
+  .related h3 a:focus-visible {
+    outline: none;
+  }
+
+  .related:has(.stretched-link:focus-visible) {
+    outline: 2px solid var(--violet-500);
+    outline-offset: 3px;
+  }
+
+  .svc-faq-intro {
+    margin-bottom: 0;
+  }
+</style>

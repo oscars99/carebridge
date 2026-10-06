@@ -1,0 +1,36 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { breadcrumbNode } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  path: string;
+  updated: string;
+}
+
+const { title, description, heading, path, updated } = Astro.props;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: heading, path },
+];
+---
+
+<BaseLayout title={title} description={description} schema={[breadcrumbNode(path, crumbs)]}>
+  <PageHero title={heading} intro={`Last updated: ${updated}`} crumbs={crumbs} />
+  <section class="section theme-white legal">
+    <div class="container container--narrow">
+      <article class="prose">
+        <slot />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: clamp(48px, 6vw, 72px);
+  }
+</style>

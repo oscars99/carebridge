@@ -1,0 +1,855 @@
+---
+import Icon from '../Icon.astro';
+import Marquee from '../Marquee.astro';
+import { marqueeServices } from '../../data/home';
+
+const rotatorWords = ['websites that convert.', 'SEO that ranks.', 'ads that pay off.', 'apps customers love.', 'AI that works 24/7.'];
+---
+
+<section class="hero theme-dark" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="orb orb--violet hero__orb hero__orb--1"></div>
+    <div class="orb orb--blue hero__orb hero__orb--2"></div>
+    <div class="orb orb--cyan hero__orb hero__orb--3"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <a href="/services/ai-automation/" class="pill hero__pill enter" style="--d: 0">
+        <span class="pill__tag">AI</span>{' '}
+        Chatbots that work 24/7
+        <Icon name="arrow-right" size={16} strokeWidth={2} />
+      </a>
+
+      <h1 id="hero-title" class="display enter" style="--d: 1">
+        Websites, SEO &amp; marketing that <span class="text-gradient text-gradient--animate">grow small businesses</span>
+      </h1>
+
+      <p class="lead hero__lead enter" style="--d: 2">
+        Digital AI Force is a full-service digital agency that pairs human strategy with AI speed — fast websites, top Google
+        rankings, ads, mobile apps and smart automations, all handled for you.
+      </p>
+
+      <p class="hero__rotator enter" style="--d: 3">
+        <span class="sr-only">We build websites that convert, SEO that ranks, ads that pay off, apps customers love and AI that works 24/7.</span>
+        <span aria-hidden="true" class="hero__rotator-line">
+          <span class="hero__rotator-label">We build</span>
+          <span class="rotator" data-rotator>
+            {rotatorWords.map((w, i) => <span class:list={['rotator__word', { 'is-active': i === 0 }]}>{w}</span>)}
+          </span>
+        </span>
+      </p>
+
+      <div class="btn-row hero__ctas enter" style="--d: 4">
+        <a href="/contact/" class="btn btn--primary btn--lg">
+          Get a free quote <Icon name="arrow-right" class="icon--move" />
+        </a>
+        <a href="/services/" class="btn btn--ghost btn--lg">Explore services</a>
+      </div>
+
+      <ul class="hero__trust enter" style="--d: 5" role="list">
+        <li><Icon name="circle-check" size={18} /> Free strategy call</li>
+        <li><Icon name="circle-check" size={18} /> No long-term contracts</li>
+        <li><Icon name="circle-check" size={18} /> You own everything</li>
+      </ul>
+    </div>
+
+    <div class="hero__visual enter" style="--d: 3" aria-hidden="true">
+      <div class="hv" data-tilt>
+        <div class="hv__window">
+          <div class="hv__bar">
+            <span class="hv__dot"></span><span class="hv__dot"></span><span class="hv__dot"></span>
+            <span class="hv__url"><Icon name="lock" size={12} strokeWidth={2.4} /> yourbusiness.com</span>
+          </div>
+          <div class="hv__body">
+            <div class="hv__site">
+              <div class="hv__site-nav"><b></b><i></i><i></i><i></i></div>
+              <div class="hv__site-hero">
+                <i class="w-90"></i>
+                <i class="w-70"></i>
+                <i class="w-45 hv__accent"></i>
+                <div class="hv__site-btns"><b></b><b class="hv__ghost"></b></div>
+              </div>
+              <div class="hv__site-cards"><i></i><i></i><i></i></div>
+            </div>
+            <div class="hv__chart">
+              <div class="hv__chart-head">
+                <span>Website leads</span>
+                <strong><Icon name="trending-up" size={14} strokeWidth={2.4} /> Growing</strong>
+              </div>
+              <svg viewBox="0 0 300 120" class="hv__svg" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="hvLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stop-color="#a78bfa"></stop>
+                    <stop offset="0.6" stop-color="#60a5fa"></stop>
+                    <stop offset="1" stop-color="#22d3ee"></stop>
+                  </linearGradient>
+                  <linearGradient id="hvArea" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#7c5cff" stop-opacity="0.45"></stop>
+                    <stop offset="1" stop-color="#7c5cff" stop-opacity="0"></stop>
+                  </linearGradient>
+                </defs>
+                <g class="hv__gridlines">
+                  <line x1="0" x2="300" y1="30" y2="30"></line>
+                  <line x1="0" x2="300" y1="60" y2="60"></line>
+                  <line x1="0" x2="300" y1="90" y2="90"></line>
+                </g>
+                <path
+                  class="hv__area"
+                  d="M0 100 C 20 96, 30 90, 45 92 S 75 98, 95 86 S 125 70, 145 74 S 175 66, 195 52 S 230 44, 250 36 S 280 18, 300 12 L300 120 L0 120 Z"
+                  fill="url(#hvArea)"></path>
+                <path
+                  class="hv__line"
+                  pathLength="1"
+                  d="M0 100 C 20 96, 30 90, 45 92 S 75 98, 95 86 S 125 70, 145 74 S 175 66, 195 52 S 230 44, 250 36 S 280 18, 300 12"
+                  fill="none"
+                  stroke="url(#hvLine)"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  vector-effect="non-scaling-stroke"></path>
+              </svg>
+              <div class="hv__kpis">
+                <span><i class="hv__k1"></i>Calls</span>
+                <span><i class="hv__k2"></i>Forms</span>
+                <span><i class="hv__k3"></i>Bookings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hv__float hv__float--score" data-parallax="18">
+          <div class="hv__float-inner">
+            <svg viewBox="0 0 64 64" class="hv__ring">
+              <circle cx="32" cy="32" r="26" class="hv__ring-track"></circle>
+              <circle cx="32" cy="32" r="26" class="hv__ring-value" pathLength="100"></circle>
+            </svg>
+            <div>
+              <strong data-count="98">98</strong>
+              <span>PageSpeed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hv__float hv__float--lead" data-parallax="-22">
+          <div class="hv__float-inner">
+            <span class="hv__avatar">JM</span>
+            <div>
+              <strong>New lead</strong>
+              <span>Quote request · just now</span>
+            </div>
+            <span class="hv__bell"><Icon name="bell-ring" size={16} strokeWidth={2} /></span>
+          </div>
+        </div>
+
+        <div class="hv__float hv__float--rank" data-parallax="14">
+          <div class="hv__float-inner">
+            <span class="hv__icon"><Icon name="search" size={16} strokeWidth={2.2} /></span>
+            <div>
+              <span>Google search</span>
+              <strong>Page 1 <Icon name="arrow-up-right" size={14} strokeWidth={2.4} /></strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="hv__float hv__float--ai" data-parallax="-12">
+          <div class="hv__float-inner">
+            <span class="hv__icon hv__icon--bot"><Icon name="bot" size={16} strokeWidth={2} /></span>
+            <p>Hi! Want to book a free consultation?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Marquee items={marqueeServices} />
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: clip;
+    padding-top: calc(var(--header-h) + clamp(28px, 4.5vw, 64px));
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero__orb {
+    animation: drift 22s var(--ease-in-out) infinite;
+  }
+
+  .hero__orb--1 {
+    width: 620px;
+    height: 620px;
+    top: -220px;
+    left: -160px;
+  }
+
+  .hero__orb--2 {
+    width: 560px;
+    height: 560px;
+    top: 10%;
+    right: -200px;
+    opacity: 0.4;
+    animation-duration: 26s;
+    animation-delay: -6s;
+  }
+
+  .hero__orb--3 {
+    width: 420px;
+    height: 420px;
+    bottom: -120px;
+    left: 38%;
+    opacity: 0.28;
+    animation-duration: 30s;
+    animation-delay: -12s;
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: clamp(48px, 6vw, 72px);
+    align-items: center;
+    padding-bottom: clamp(56px, 7vw, 88px);
+  }
+
+  @media (min-width: 1080px) {
+    .hero__inner {
+      grid-template-columns: 1.14fr 0.86fr;
+    }
+  }
+
+  .hero__copy {
+    max-width: 700px;
+  }
+
+  .hero h1.display {
+    font-size: clamp(2.45rem, 5.4vw, 4.3rem);
+  }
+
+  .hero__pill {
+    margin-bottom: 26px;
+    transition:
+      border-color var(--dur) ease,
+      background-color var(--dur) ease;
+  }
+
+  .hero__pill :global(.icon) {
+    color: var(--violet-300);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero__pill:hover {
+      border-color: rgba(196, 181, 253, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero__pill:hover :global(.icon) {
+      transform: translateX(3px);
+    }
+  }
+
+  .hero h1 {
+    color: #fff;
+  }
+
+  .hero__lead {
+    margin-top: 24px;
+  }
+
+  .hero__rotator {
+    margin-top: 22px;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .hero__rotator-line {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .hero__rotator-label {
+    color: var(--on-night-muted);
+    font-weight: 500;
+  }
+
+  .rotator {
+    position: relative;
+    display: inline-grid;
+    overflow: hidden;
+    height: 1.4em;
+    line-height: 1.4;
+  }
+
+  .rotator__word {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    background: var(--grad-text-on-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateY(100%);
+    transition:
+      transform 0.6s var(--ease-out),
+      opacity 0.4s ease;
+  }
+
+  .rotator__word.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .rotator__word.is-leaving {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  .hero__ctas {
+    margin-top: 30px;
+  }
+
+  @media (max-width: 559px) {
+    .hero__ctas .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  .hero__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-top: 28px;
+    padding: 0;
+    list-style: none;
+    font-size: 0.95rem;
+    color: var(--on-night-muted);
+  }
+
+  .hero__trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero__trust :global(.icon) {
+    color: var(--success-on-dark);
+  }
+
+  /* ---------- Visual ---------- */
+  .hero__visual {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    margin-inline: auto;
+    perspective: 1400px;
+  }
+
+  .hv {
+    position: relative;
+    padding: 34px 26px 42px;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .hv__window {
+    position: relative;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(28, 35, 88, 0.78), rgba(11, 16, 48, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 50px 100px -40px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(124, 92, 255, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+  }
+
+  .hv__window::before {
+    content: '';
+    position: absolute;
+    inset: -40% -10% auto;
+    height: 70%;
+    background: radial-gradient(closest-side, rgba(124, 92, 255, 0.35), transparent);
+    pointer-events: none;
+  }
+
+  .hv__bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .hv__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .hv__dot:nth-child(1) {
+    background: #ff5f57;
+  }
+
+  .hv__dot:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .hv__dot:nth-child(3) {
+    background: #28c840;
+  }
+
+  .hv__url {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline: auto;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    color: var(--on-night-muted);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .hv__body {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .hv__site {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .hv__site i,
+  .hv__site b {
+    display: block;
+    border-radius: 6px;
+  }
+
+  .hv__site-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .hv__site-nav b {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: var(--grad-brand);
+    margin-right: auto;
+  }
+
+  .hv__site-nav i {
+    width: 34px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .hv__site-hero {
+    display: grid;
+    gap: 8px;
+  }
+
+  .hv__site-hero i {
+    height: 11px;
+    background: rgba(255, 255, 255, 0.18);
+    transform-origin: left;
+    animation: build-line 1.2s var(--ease-out) both;
+  }
+
+  .hv__site-hero i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .hv__site-hero i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .hv__site-hero .w-90 {
+    width: 90%;
+    height: 14px;
+  }
+
+  .hv__site-hero .w-70 {
+    width: 70%;
+    height: 14px;
+  }
+
+  .hv__site-hero .w-45 {
+    width: 45%;
+  }
+
+  .hv__accent {
+    background: var(--grad-brand) !important;
+  }
+
+  .hv__site-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .hv__site-btns b {
+    width: 74px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--grad-cta);
+    box-shadow: 0 6px 16px -6px rgba(91, 61, 245, 0.8);
+  }
+
+  .hv__site-btns .hv__ghost {
+    width: 60px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: none;
+  }
+
+  .hv__site-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .hv__site-cards i {
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .hv__chart {
+    padding: 14px 14px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .hv__chart-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--on-night-muted);
+    margin-bottom: 6px;
+  }
+
+  .hv__chart-head strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: var(--success-on-dark);
+    background: rgba(74, 222, 128, 0.12);
+  }
+
+  .hv__svg {
+    width: 100%;
+    height: 110px;
+    overflow: visible;
+  }
+
+  .hv__gridlines line {
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-dasharray: 3 5;
+  }
+
+  .hv__line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw-line 2.2s var(--ease-out) 0.6s forwards;
+    filter: drop-shadow(0 4px 10px rgba(124, 92, 255, 0.6));
+  }
+
+  .hv__area {
+    opacity: 0;
+    animation: fade-in 1.4s ease 1.4s forwards;
+  }
+
+  .hv__kpis {
+    display: flex;
+    gap: 14px;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: var(--on-night-muted);
+  }
+
+  .hv__kpis span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hv__kpis i {
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+  }
+
+  .hv__k1 {
+    background: #a78bfa;
+  }
+
+  .hv__k2 {
+    background: #60a5fa;
+  }
+
+  .hv__k3 {
+    background: #22d3ee;
+  }
+
+  /* Floating cards */
+  .hv__float {
+    position: absolute;
+    z-index: 2;
+    transition: translate 0.5s var(--ease-out);
+    transform: translateZ(40px);
+  }
+
+  .hv__float-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 10px 10px;
+    border-radius: 16px;
+    background: rgba(20, 26, 72, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.85);
+    font-size: 0.78rem;
+    color: var(--on-night-muted);
+    animation: float 6s var(--ease-in-out) infinite;
+  }
+
+  .hv__float-inner strong {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    color: #fff;
+  }
+
+  .hv__float-inner span {
+    display: block;
+  }
+
+  .hv__float--score {
+    top: 0;
+    right: -4px;
+    animation: pop-in 0.8s var(--ease-spring) 0.9s both;
+  }
+
+  .hv__float--score strong {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .hv__ring {
+    width: 46px;
+    height: 46px;
+    transform: rotate(-90deg);
+  }
+
+  .hv__ring circle {
+    fill: none;
+    stroke-width: 6;
+  }
+
+  .hv__ring-track {
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  .hv__ring-value {
+    stroke: var(--success-on-dark);
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: ring-fill 1.6s var(--ease-out) 1.2s forwards;
+  }
+
+  .hv__float--lead {
+    bottom: 8px;
+    left: -14px;
+    animation: pop-in 0.8s var(--ease-spring) 1.3s both;
+  }
+
+  .hv__float--lead .hv__float-inner {
+    animation-delay: -2s;
+  }
+
+  .hv__avatar {
+    display: grid !important;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #fff;
+    background: linear-gradient(135deg, #f472b6, #7c5cff);
+  }
+
+  .hv__bell {
+    display: grid !important;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-left: 6px;
+    border-radius: 50%;
+    color: var(--success-on-dark);
+    background: rgba(74, 222, 128, 0.14);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  .hv__float--rank {
+    top: 42%;
+    left: -28px;
+    animation: pop-in 0.8s var(--ease-spring) 1.6s both;
+  }
+
+  .hv__float--rank .hv__float-inner {
+    animation-delay: -4s;
+    animation-duration: 7s;
+  }
+
+  .hv__float--rank strong :global(.icon) {
+    color: var(--success-on-dark);
+  }
+
+  .hv__icon {
+    display: grid !important;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    color: #fff;
+    background: var(--grad-cta);
+  }
+
+  .hv__icon--bot {
+    background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  }
+
+  .hv__float--ai {
+    right: -18px;
+    bottom: 96px;
+    max-width: 230px;
+    animation: pop-in 0.8s var(--ease-spring) 1.9s both;
+  }
+
+  .hv__float--ai .hv__float-inner {
+    animation-delay: -1s;
+    animation-duration: 6.5s;
+  }
+
+  .hv__float--ai p {
+    color: #fff;
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 520px) {
+    .hv {
+      padding: 26px 6px 40px;
+    }
+
+    .hv__float--rank {
+      left: -6px;
+      top: auto;
+      bottom: 118px;
+    }
+
+    .hv__float--lead {
+      bottom: 52px;
+      left: 0;
+    }
+
+    .hv__float--score {
+      right: 0;
+    }
+
+    .hv__float--ai {
+      display: none;
+    }
+
+    .hv__float-inner {
+      font-size: 0.72rem;
+    }
+  }
+
+  @keyframes build-line {
+    from {
+      transform: scaleX(0);
+      opacity: 0.2;
+    }
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes draw-line {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes ring-fill {
+    to {
+      stroke-dashoffset: 2;
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      scale: 0.85;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hv__line {
+      stroke-dashoffset: 0;
+    }
+
+    .hv__area {
+      opacity: 1;
+    }
+
+    .hv__ring-value {
+      stroke-dashoffset: 2;
+    }
+  }
+</style>

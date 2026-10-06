@@ -1,0 +1,118 @@
+---
+/** Dark hero band used at the top of every inner page. */
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { Crumb } from '../lib/schema';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  accent?: string;
+  intro?: string;
+  crumbs?: Crumb[];
+  align?: 'left' | 'center';
+  size?: 'default' | 'large';
+}
+
+const { eyebrow, title, accent, intro, crumbs, align = 'left', size = 'default' } = Astro.props;
+---
+
+<section class:list={['page-hero theme-dark', `page-hero--${align}`, `page-hero--${size}`]}>
+  <div class="page-hero__bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="orb orb--violet page-hero__orb page-hero__orb--1"></div>
+    <div class="orb orb--cyan page-hero__orb page-hero__orb--2"></div>
+    <div class="bg-noise"></div>
+  </div>
+  <div class="container page-hero__inner">
+    <div class="page-hero__main">
+      {crumbs && <div class="enter" style="--d: 0"><Breadcrumbs crumbs={crumbs} /></div>}
+      {eyebrow && <p class="eyebrow enter" style="--d: 1">{eyebrow}</p>}
+      <h1 class="enter" style="--d: 2">
+        {title} {accent && <span class="text-gradient text-gradient--animate">{accent}</span>}
+      </h1>
+      {intro && <p class="lead enter" style="--d: 3">{intro}</p>}
+      <slot />
+    </div>
+    <slot name="aside" />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 80px));
+    padding-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .page-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .page-hero__orb--1 {
+    width: 560px;
+    height: 560px;
+    top: -260px;
+    left: -140px;
+    opacity: 0.5;
+    animation: drift 22s var(--ease-in-out) infinite;
+  }
+
+  .page-hero__orb--2 {
+    width: 420px;
+    height: 420px;
+    bottom: -260px;
+    right: -100px;
+    opacity: 0.25;
+    animation: drift 26s var(--ease-in-out) infinite reverse;
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (min-width: 1080px) {
+    .page-hero__inner:has(> :nth-child(2)) {
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 64px;
+    }
+  }
+
+  .page-hero__main {
+    max-width: 820px;
+  }
+
+  .page-hero .crumbs {
+    margin-bottom: 26px;
+  }
+
+  .page-hero h1 {
+    color: #fff;
+  }
+
+  .page-hero .lead {
+    margin-top: 22px;
+  }
+
+  .page-hero--large h1 {
+    font-size: clamp(2.5rem, 6vw, 4.6rem);
+  }
+
+  .page-hero--center .page-hero__main {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .page-hero--center .lead {
+    margin-inline: auto;
+  }
+
+  .page-hero--center :global(.crumbs ol) {
+    justify-content: center;
+  }
+</style>

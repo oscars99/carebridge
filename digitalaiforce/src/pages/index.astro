@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import ServicesBento from '../components/ServicesBento.astro';
+import AIShowcase from '../components/home/AIShowcase.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import Promises from '../components/home/Promises.astro';
+import Industries from '../components/home/Industries.astro';
+import PricingPlans from '../components/PricingPlans.astro';
+import FAQ from '../components/FAQ.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/Icon.astro';
+import { processSteps, homeFaqs } from '../data/home';
+import { faqNode } from '../lib/schema';
+import { site } from '../config/site';
+
+const title = 'Small Business Web Design, SEO & Marketing | Digital AI Force';
+const description =
+  'Digital AI Force builds fast websites, mobile apps, SEO and marketing campaigns that bring small businesses more customers. AI-powered, human-led. Free quote.';
+---
+
+<BaseLayout title={title} description={description} schema={[faqNode('/', homeFaqs)]}>
+  <HomeHero />
+
+  <section class="section" id="services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">What we do</p>
+          <h2 id="services-title">Everything your business needs to <span class="text-gradient">win online</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--i: 1">
+          One team for your website, search visibility, marketing, apps and automation — so nothing falls through the cracks between
+          vendors.
+        </p>
+      </div>
+      <ServicesBento />
+    </div>
+  </section>
+
+  <AIShowcase />
+
+  <section class="section theme-white" id="process" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2 id="process-title">From first call to growth in <span class="text-gradient">four simple steps</span></h2>
+        <p class="lead">No jargon, no surprises. You’ll always know what’s happening, what it costs and what’s next.</p>
+      </div>
+      <ProcessSteps steps={processSteps} />
+    </div>
+  </section>
+
+  <Promises />
+
+  <section class="section" id="industries" aria-labelledby="industries-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">Who we help</p>
+          <h2 id="industries-title">Built for local businesses <span class="text-gradient">&amp; growing brands</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--i: 1">
+          From neighborhood favorites to ambitious startups, we tailor every website and campaign to how your customers actually search
+          and buy.
+        </p>
+      </div>
+      <Industries />
+    </div>
+  </section>
+
+  <section class="section theme-white" id="pricing" aria-labelledby="pricing-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Simple pricing</p>
+        <h2 id="pricing-title">Transparent packages. <span class="text-gradient">No surprises.</span></h2>
+        <p class="lead">Fixed-price website projects and month-to-month growth plans. Every project starts with a free strategy call.</p>
+      </div>
+      <PricingPlans id="home-pricing" />
+      <p class="center mt-4" data-reveal>
+        <a href="/pricing/" class="link-arrow">Compare all plans &amp; FAQs <Icon name="arrow-right" /></a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="container split split--40-60 split--top">
+      <div class="section-head faq-intro" data-reveal>
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title">Questions? <span class="text-gradient">We’ve got answers.</span></h2>
+        <p class="lead">Everything small business owners usually ask before working with us. Still curious? Just ask.</p>
+        <a href="/contact/" class="btn btn--primary mt-3">Ask us anything <Icon name="arrow-right" class="icon--move" /></a>
+      </div>
+      <FAQ faqs={homeFaqs} />
+    </div>
+  </section>
+
+  <section class="section theme-dark home-contact" id="contact" aria-labelledby="contact-title">
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="orb orb--violet home-contact__orb" aria-hidden="true"></div>
+    <div class="container split split--40-60 split--top">
+      <div class="home-contact__intro" data-reveal>
+        <p class="eyebrow">Let’s talk</p>
+        <h2 id="contact-title">Get your free <span class="text-gradient">growth plan</span></h2>
+        <p class="lead">
+          Tell us where you are and where you want to be. We’ll reply {site.responseTime} with honest recommendations and a clear quote.
+        </p>
+        <ul class="home-contact__steps" role="list">
+          <li><span>1</span> Share a few details about your business</li>
+          <li><span>2</span> Get a free strategy call &amp; quick audit</li>
+          <li><span>3</span> Receive a clear plan with a fixed price</li>
+        </ul>
+        <a class="home-contact__email" href={`mailto:${site.email}`}><Icon name="mail" size={20} /> {site.email}</a>
+      </div>
+      <div class="home-contact__card" data-reveal="scale">
+        <ContactForm id="home" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-intro {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 960px) {
+    .faq-intro {
+      position: sticky;
+      top: calc(var(--header-h) + 32px);
+    }
+  }
+
+  .home-contact {
+    overflow: hidden;
+  }
+
+  .home-contact .container {
+    position: relative;
+  }
+
+  .home-contact__orb {
+    width: 600px;
+    height: 600px;
+    left: -200px;
+    bottom: -260px;
+    opacity: 0.4;
+    animation: drift 24s var(--ease-in-out) infinite;
+  }
+
+  .home-contact__intro .lead {
+    margin-top: 1.1rem;
+  }
+
+  .home-contact__steps {
+    display: grid;
+    gap: 14px;
+    margin: 32px 0;
+    padding: 0;
+  }
+
+  .home-contact__steps li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--on-night);
+  }
+
+  .home-contact__steps span {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: #fff;
+    background: rgba(124, 92, 255, 0.22);
+    border: 1px solid rgba(196, 181, 253, 0.3);
+  }
+
+  .home-contact__email {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #fff;
+    border-bottom: 1px solid rgba(196, 181, 253, 0.4);
+    padding-bottom: 4px;
+  }
+
+  .home-contact__card {
+    padding: clamp(22px, 3.5vw, 40px);
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+  }
+</style>

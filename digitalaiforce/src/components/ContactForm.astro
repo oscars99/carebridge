@@ -1,0 +1,477 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../data/services';
+import { site } from '../config/site';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'contact' } = Astro.props;
+const f = (name: string) => `${id}-${name}`;
+const budgets = ['Not sure yet', 'Under $2,000', '$2,000 – $5,000', '$5,000 – $10,000', '$10,000+', 'Monthly plan'];
+---
+
+<div class="cform">
+  <form
+    class="cform__form"
+    novalidate
+    data-contact-form
+    data-endpoint={site.form.endpoint}
+    data-supabase-url={site.form.supabase.url}
+    data-supabase-key={site.form.supabase.anonKey}
+    data-supabase-table={site.form.supabase.table}
+    data-email={site.email}
+    aria-describedby={f('privacy')}
+  >
+    <div class="cform__row">
+      <div class="field">
+        <label for={f('name')}>Your name <span aria-hidden="true">*</span></label>
+        <input id={f('name')} name="name" type="text" autocomplete="name" required maxlength="120" aria-describedby={f('name-error')} />
+        <p class="field__error" id={f('name-error')} data-error-for="name"></p>
+      </div>
+      <div class="field">
+        <label for={f('email')}>Email <span aria-hidden="true">*</span></label>
+        <input
+          id={f('email')}
+          name="email"
+          type="email"
+          autocomplete="email"
+          inputmode="email"
+          required
+          maxlength="160"
+          aria-describedby={f('email-error')}
+        />
+        <p class="field__error" id={f('email-error')} data-error-for="email"></p>
+      </div>
+    </div>
+
+    <div class="cform__row">
+      <div class="field">
+        <label for={f('phone')}>Phone <span class="field__optional">(optional)</span></label>
+        <input id={f('phone')} name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" />
+      </div>
+      <div class="field">
+        <label for={f('business')}>Business name <span class="field__optional">(optional)</span></label>
+        <input id={f('business')} name="business" type="text" autocomplete="organization" maxlength="120" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for={f('website')}>Current website <span class="field__optional">(optional)</span></label>
+      <input id={f('website')} name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" maxlength="200" />
+    </div>
+
+    <fieldset class="field cform__services">
+      <legend>What can we help with?</legend>
+      <div class="cform__chips">
+        {
+          services.map((s) => (
+            <label class="choice">
+              <input type="checkbox" name="services" value={s.navLabel} data-service-slug={s.slug} />
+              <span>
+                <Icon name={s.icon} size={16} strokeWidth={2} />
+                {s.navLabel}
+              </span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for={f('budget')}>Estimated budget</label>
+      <div class="select">
+        <select id={f('budget')} name="budget">
+          {budgets.map((b) => <option value={b}>{b}</option>)}
+        </select>
+        <Icon name="chevron-down" size={18} />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for={f('message')}>Tell us about your business and goals <span aria-hidden="true">*</span></label>
+      <textarea
+        id={f('message')}
+        name="message"
+        rows="5"
+        required
+        minlength="10"
+        maxlength="4000"
+        placeholder="e.g. We’re a family-owned bakery and want a new website that shows up on Google and takes online orders."
+        aria-describedby={f('message-error')}></textarea>
+      <p class="field__error" id={f('message-error')} data-error-for="message"></p>
+    </div>
+
+    <input type="hidden" name="plan" value="" data-plan-field />
+    <p class="cform__plan" data-plan-note hidden></p>
+
+    <!-- Spam trap: real visitors never see or fill this field -->
+    <div class="cform__trap" aria-hidden="true">
+      <label for={f('company-website')}>Leave this field empty</label>
+      <input id={f('company-website')} name="company_website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="cform__submit">
+      <button type="submit" class="btn btn--primary btn--lg">
+        <span class="cform__spinner" aria-hidden="true"></span>
+        <span data-submit-label>Send my request</span>
+        <Icon name="send" class="icon--move" />
+      </button>
+      <p class="cform__privacy" id={f('privacy')}>
+        <Icon name="lock" size={14} strokeWidth={2.2} /> We reply {site.responseTime}. No spam, ever — see our <a href="/privacy/">privacy policy</a>.
+      </p>
+    </div>
+
+    <p class="cform__status" role="status" aria-live="polite" data-form-status></p>
+  </form>
+
+  <div class="cform__success" data-form-success hidden tabindex="-1">
+    <span class="cform__check" aria-hidden="true">
+      <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"></circle><path d="M15 27l7 7 15-15"></path></svg>
+    </span>
+    <h3 data-success-title>Thanks — we’ve got your message!</h3>
+    <p data-success-text>We’ll get back to you {site.responseTime} with next steps. In the meantime, feel free to explore our services.</p>
+    <a href="/services/" class="link-arrow">Explore services <Icon name="arrow-right" /></a>
+  </div>
+</div>
+
+<style>
+  .cform {
+    position: relative;
+  }
+
+  .cform__form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .cform__row {
+    display: grid;
+    gap: 18px;
+  }
+
+  @media (min-width: 640px) {
+    .cform__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .field label,
+  .field legend {
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--heading);
+  }
+
+  .field legend {
+    margin-bottom: 10px;
+    padding: 0;
+  }
+
+  .field label span[aria-hidden] {
+    color: var(--violet-500);
+  }
+
+  .field__optional {
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 52px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    font-size: 1rem;
+    color: var(--heading);
+    background: var(--field-bg, var(--surface));
+    border: 1px solid var(--field-border, var(--line));
+    transition:
+      border-color var(--dur-fast) ease,
+      box-shadow var(--dur-fast) ease,
+      background-color var(--dur-fast) ease;
+    appearance: none;
+  }
+
+  .field textarea {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.55;
+  }
+
+  .field ::placeholder {
+    color: var(--text-muted);
+    opacity: 0.75;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--violet-500);
+    box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--field-danger, var(--danger));
+    box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.12);
+  }
+
+  .field__error {
+    min-height: 0;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--field-danger, var(--danger));
+  }
+
+  .field__error:empty {
+    display: none;
+  }
+
+  .select {
+    position: relative;
+  }
+
+  .select :global(.icon) {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .cform__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .choice {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .choice span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--field-bg, var(--surface));
+    border: 1px solid var(--field-border, var(--line));
+    transition:
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out);
+    user-select: none;
+  }
+
+  .choice span :global(.icon) {
+    color: var(--violet-500);
+    transition: color var(--dur-fast) ease;
+  }
+
+  .choice input:checked + span {
+    color: #fff;
+    background: var(--grad-cta);
+    border-color: transparent;
+    box-shadow: 0 8px 20px -10px rgba(91, 61, 245, 0.8);
+  }
+
+  .choice input:checked + span :global(.icon) {
+    color: #fff;
+  }
+
+  .choice input:focus-visible + span {
+    outline: 2px solid var(--violet-500);
+    outline-offset: 3px;
+  }
+
+  .choice:active span {
+    transform: scale(0.96);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .choice:hover input:not(:checked) + span {
+      border-color: var(--violet-500);
+    }
+  }
+
+  .cform__plan {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    color: var(--heading);
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+  }
+
+  .cform__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .cform__submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin-top: 4px;
+  }
+
+  .cform__privacy {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .cform__privacy a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cform__spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .cform__form.is-loading .cform__spinner {
+    display: inline-block;
+  }
+
+  .cform__form.is-loading button[type='submit'] :global(.icon) {
+    display: none;
+  }
+
+  .cform__status {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .cform__status:empty {
+    display: none;
+  }
+
+  .cform__status.is-error {
+    color: var(--field-danger, var(--danger));
+  }
+
+  /* ---------- Success ---------- */
+  .cform__success {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: clamp(32px, 5vw, 56px) 24px;
+    text-align: center;
+  }
+
+  .cform__success:not([hidden]) {
+    animation: enter-up 0.7s var(--ease-out) both;
+  }
+
+  .cform__success:focus {
+    outline: none;
+  }
+
+  .cform__success p {
+    max-width: 46ch;
+    color: var(--text-muted);
+  }
+
+  .cform__check svg {
+    width: 76px;
+    height: 76px;
+  }
+
+  .cform__check circle {
+    fill: rgba(74, 222, 128, 0.12);
+    stroke: var(--success-on-dark);
+    stroke-width: 2;
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+    animation: check-draw 0.8s var(--ease-out) 0.1s forwards;
+  }
+
+  .cform__check path {
+    fill: none;
+    stroke: var(--success-on-dark);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: check-draw 0.5s var(--ease-out) 0.6s forwards;
+  }
+
+  @keyframes check-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Dark-surface variant (used on the home page contact section) */
+  :global(.theme-dark) .cform {
+    --field-bg: rgba(255, 255, 255, 0.04);
+    --field-border: rgba(255, 255, 255, 0.14);
+    --field-danger: var(--danger-on-dark);
+  }
+
+  :global(.theme-dark) .field input,
+  :global(.theme-dark) .field select,
+  :global(.theme-dark) .field textarea {
+    color: #fff;
+  }
+
+  :global(.theme-dark) .field select option {
+    color: var(--ink);
+  }
+
+  :global(.theme-dark) .choice span :global(.icon) {
+    color: var(--violet-300);
+  }
+
+  :global(.theme-dark) .cform__privacy a {
+    color: #fff;
+  }
+</style>

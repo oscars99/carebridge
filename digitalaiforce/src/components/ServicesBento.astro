@@ -1,0 +1,730 @@
+---
+import Icon from './Icon.astro';
+import { services, serviceUrl } from '../data/services';
+
+interface Props {
+  /** Heading level for card titles (h3 under a section h2 by default). */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div class="bento">
+  {
+    services.map((s, i) => (
+      <article class:list={['card spotlight lift bento__card', { 'bento__card--wide': i < 2 }]} data-reveal style={`--i: ${i % 4}`}>
+        <span class="bento__bg-icon" aria-hidden="true">
+          <Icon name={s.icon} size={160} strokeWidth={1} />
+        </span>
+        <div class="bento__content">
+          <span class="icon-badge">
+            <Icon name={s.icon} />
+          </span>
+          <Heading class="bento__title">
+            <a href={serviceUrl(s.slug)} class="stretched-link">
+              {s.name}
+            </a>
+          </Heading>
+          <p class="bento__text">{s.summary}</p>
+          <ul class="chip-row bento__chips" role="list">
+            {s.highlights.map((h) => (
+              <li class="chip">{h}</li>
+            ))}
+          </ul>
+          <span class="link-arrow bento__more" aria-hidden="true">
+            Learn more <Icon name="arrow-right" />
+          </span>
+        </div>
+
+        {i === 0 && (
+          <div class="bento__visual devices" aria-hidden="true">
+            <div class="devices__desktop">
+              <div class="devices__bar">
+                <i />
+                <i />
+                <i />
+              </div>
+              <div class="devices__screen">
+                <b class="devices__line devices__line--title" />
+                <b class="devices__line devices__line--sub" />
+                <b class="devices__btn" />
+                <div class="devices__tiles">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+            </div>
+            <div class="devices__phone">
+              <span class="devices__notch" />
+              <b class="devices__line devices__line--title" />
+              <b class="devices__line devices__line--sub" />
+              <b class="devices__btn" />
+              <i class="devices__tile" />
+              <i class="devices__tile" />
+            </div>
+            <span class="devices__score">
+              <Icon name="gauge" size={14} strokeWidth={2.4} /> 98
+            </span>
+          </div>
+        )}
+
+        {i === 1 && (
+          <div class="bento__visual serp" aria-hidden="true">
+            <div class="serp__search">
+              <Icon name="search" size={14} strokeWidth={2.4} />
+              <span class="serp__query">plumber near me</span>
+              <span class="serp__caret" />
+            </div>
+            <ol class="serp__results">
+              <li class="serp__row serp__row--a">
+                <i class="serp__fav" />
+                <span>
+                  <b class="w-70" />
+                  <b class="w-45 serp__url" />
+                </span>
+              </li>
+              <li class="serp__row serp__row--b">
+                <i class="serp__fav" />
+                <span>
+                  <b class="w-60" />
+                  <b class="w-40 serp__url" />
+                </span>
+              </li>
+              <li class="serp__row serp__row--you">
+                <i class="serp__fav serp__fav--you" />
+                <span>
+                  <strong>Your Business</strong>
+                  <small>yourbusiness.com</small>
+                </span>
+                <em class="serp__up">
+                  <Icon name="trending-up" size={14} strokeWidth={2.4} />
+                </em>
+              </li>
+            </ol>
+          </div>
+        )}
+      </article>
+    ))
+  }
+  <aside class="card bento__card bento__card--cta theme-dark" data-reveal style="--i: 2">
+    <div class="bento__cta-glow" aria-hidden="true"></div>
+    <p class="eyebrow">Free strategy call</p>
+    <p class="bento__cta-title">Not sure what you need yet?</p>
+    <p class="bento__cta-text">
+      Tell us about your business and goals. We’ll recommend the few things that will make the biggest difference — no jargon, no
+      pressure.
+    </p>
+    <a href="/contact/" class="btn btn--light">
+      Get my free plan <Icon name="arrow-right" class="icon--move" />
+    </a>
+  </aside>
+</div>
+
+<style>
+  .bento {
+    display: grid;
+    gap: clamp(14px, 1.8vw, 20px);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 680px) {
+    .bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bento__card--wide,
+    .bento__card--cta {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .bento {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .bento__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 100%;
+  }
+
+  .bento__content {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bento__text {
+    font-size: 0.98rem;
+  }
+
+  .bento__title {
+    margin: 4px 0 0;
+  }
+
+  .bento__title a:focus-visible {
+    outline: none;
+  }
+
+  .bento__card:has(.stretched-link:focus-visible) {
+    outline: 2px solid var(--violet-500);
+    outline-offset: 3px;
+  }
+
+  .bento__bg-icon {
+    position: absolute;
+    right: -28px;
+    top: -28px;
+    color: var(--violet-500);
+    opacity: 0.06;
+    transform: rotate(-12deg);
+    transition:
+      transform 0.8s var(--ease-out),
+      opacity var(--dur) ease;
+    pointer-events: none;
+  }
+
+  .bento__card .icon-badge {
+    transition: transform var(--dur) var(--ease-spring);
+  }
+
+  .bento__chips {
+    margin-top: auto;
+    padding: 0;
+  }
+
+  .bento__chips .chip {
+    background: var(--paper);
+  }
+
+  .bento__more {
+    font-size: 0.95rem;
+  }
+
+  .bento__card:not(.bento__card--wide) .bento__chips {
+    display: none;
+  }
+
+  .bento__card:not(.bento__card--wide) .bento__more {
+    margin-top: auto;
+  }
+
+  /* Wide (featured) cards: text + animated mini visual */
+  .bento__card--wide .bento__title {
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+  }
+
+  .bento__card--wide .bento__text {
+    font-size: 1.02rem;
+    max-width: 44ch;
+  }
+
+  .bento__card--wide .bento__bg-icon {
+    display: none;
+  }
+
+  .bento__visual {
+    position: relative;
+    margin-top: 24px;
+    min-height: 200px;
+  }
+
+  @media (min-width: 680px) {
+    .bento__card--wide {
+      display: grid;
+      grid-template-columns: 1fr 0.95fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .bento__visual {
+      margin-top: 0;
+      height: 100%;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .bento__card:hover .bento__bg-icon {
+      transform: rotate(0deg) scale(1.08);
+      opacity: 0.1;
+    }
+
+    .bento__card:hover .icon-badge {
+      transform: scale(1.08) rotate(-6deg);
+    }
+
+    .bento__card:hover .bento__more :global(.icon) {
+      transform: translateX(4px);
+    }
+  }
+
+  /* ---------- Devices visual (web design) ---------- */
+  .devices {
+    display: grid;
+    place-items: center;
+  }
+
+  .devices__desktop {
+    width: 88%;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .devices__bar {
+    display: flex;
+    gap: 5px;
+    padding: 8px 10px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .devices__bar i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d5d9e8;
+  }
+
+  .devices__screen {
+    display: grid;
+    gap: 7px;
+    padding: 16px 16px 18px;
+  }
+
+  .devices__line,
+  .devices__btn,
+  .devices__tiles i,
+  .devices__tile {
+    display: block;
+    border-radius: 6px;
+  }
+
+  .devices__line {
+    height: 9px;
+    background: #e3e6f2;
+    transform-origin: left;
+    animation: build 5s var(--ease-out) infinite;
+  }
+
+  .devices__line--title {
+    width: 72%;
+    height: 12px;
+    background: linear-gradient(90deg, #c9c0ff, #bfdbfe);
+  }
+
+  .devices__line--sub {
+    width: 52%;
+    animation-delay: 0.15s;
+  }
+
+  .devices__btn {
+    width: 64px;
+    height: 18px;
+    margin-top: 3px;
+    border-radius: 999px;
+    background: var(--grad-cta);
+    animation: build 5s var(--ease-out) 0.3s infinite;
+    transform-origin: left;
+  }
+
+  .devices__tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 8px;
+  }
+
+  .devices__tiles i {
+    height: 38px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    animation: tile-in 5s var(--ease-out) infinite;
+  }
+
+  .devices__tiles i:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  .devices__tiles i:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+
+  .devices__phone {
+    position: absolute;
+    right: 2%;
+    bottom: -6px;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    width: 30%;
+    max-width: 112px;
+    aspect-ratio: 9 / 17;
+    padding: 18px 9px 10px;
+    border-radius: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.6s var(--ease-spring);
+  }
+
+  .devices__notch {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 30%;
+    height: 5px;
+    border-radius: 4px;
+    background: #d5d9e8;
+    translate: -50% 0;
+  }
+
+  .devices__phone .devices__line--title {
+    width: 90%;
+  }
+
+  .devices__phone .devices__line--sub {
+    width: 70%;
+  }
+
+  .devices__phone .devices__btn {
+    width: 60%;
+    height: 14px;
+  }
+
+  .devices__tile {
+    height: 30px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  .devices__score {
+    position: absolute;
+    left: 2%;
+    bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--success);
+    background: #ecfdf3;
+    border: 1px solid #bbf7d0;
+    box-shadow: var(--shadow-sm);
+    animation: float 5s var(--ease-in-out) infinite;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .bento__card:hover .devices__desktop {
+      transform: translateY(-4px);
+    }
+
+    .bento__card:hover .devices__phone {
+      transform: translateY(-10px) rotate(-3deg);
+    }
+  }
+
+  /* ---------- SERP visual (SEO) ---------- */
+  .serp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .serp__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-size: 0.86rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .serp__search :global(.icon) {
+    color: var(--ink-muted);
+  }
+
+  .serp__caret {
+    width: 1.5px;
+    height: 15px;
+    margin-left: -6px;
+    background: var(--violet-600);
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .serp__results {
+    --row: 58px;
+    position: relative;
+    height: calc(var(--row) * 3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .serp__row {
+    position: absolute;
+    inset: 0 0 auto 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: calc(var(--row) - 8px);
+    padding: 0 12px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .serp__row span {
+    display: grid;
+    flex: 1;
+    gap: 5px;
+    line-height: 1.15;
+  }
+
+  .serp__row b {
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    background: #e3e6f2;
+  }
+
+  .serp__row .serp__url {
+    height: 6px;
+    background: #eef0f7;
+  }
+
+  .w-70 {
+    width: 70%;
+  }
+
+  .w-60 {
+    width: 60%;
+  }
+
+  .w-45 {
+    width: 45%;
+  }
+
+  .w-40 {
+    width: 40%;
+  }
+
+  .serp__fav {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: #e3e6f2;
+  }
+
+  .serp__fav--you {
+    background: var(--grad-brand);
+  }
+
+  .serp__row--you {
+    z-index: 2;
+    border-color: transparent;
+    box-shadow:
+      0 0 0 1.5px var(--violet-500),
+      0 16px 32px -16px rgba(91, 61, 245, 0.6);
+    animation: rank-you 7s var(--ease-in-out) infinite;
+  }
+
+  .serp__row--you strong {
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    color: var(--ink);
+  }
+
+  .serp__row--you small {
+    font-size: 0.72rem;
+    color: var(--success);
+  }
+
+  .serp__up {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: var(--success);
+    background: #ecfdf3;
+  }
+
+  .serp__row--a {
+    animation: rank-a 7s var(--ease-in-out) infinite;
+  }
+
+  .serp__row--b {
+    animation: rank-b 7s var(--ease-in-out) infinite;
+  }
+
+  /* "Your Business" climbs from #3 to #1, holds, then resets */
+  @keyframes rank-you {
+    0%,
+    12% {
+      transform: translateY(calc(var(--row) * 2));
+    }
+    38%,
+    88% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(calc(var(--row) * 2));
+    }
+  }
+
+  @keyframes rank-a {
+    0%,
+    12% {
+      transform: translateY(0);
+    }
+    38%,
+    88% {
+      transform: translateY(var(--row));
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes rank-b {
+    0%,
+    12% {
+      transform: translateY(var(--row));
+    }
+    38%,
+    88% {
+      transform: translateY(calc(var(--row) * 2));
+    }
+    100% {
+      transform: translateY(var(--row));
+    }
+  }
+
+  @keyframes build {
+    0% {
+      transform: scaleX(0);
+    }
+    18%,
+    85% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes tile-in {
+    0%,
+    10% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    28%,
+    85% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .serp__row--you {
+      animation: none;
+      transform: none;
+    }
+
+    .serp__row--a {
+      animation: none;
+      transform: translateY(var(--row));
+    }
+
+    .serp__row--b {
+      animation: none;
+      transform: translateY(calc(var(--row) * 2));
+    }
+
+    .devices__line,
+    .devices__btn,
+    .devices__tiles i {
+      animation: none;
+    }
+  }
+
+  /* ---------- CTA tile ---------- */
+  .bento .bento__card--cta {
+    justify-content: center;
+    gap: 12px;
+    background:
+      radial-gradient(90% 120% at 100% 0%, rgba(124, 92, 255, 0.55), transparent 55%),
+      radial-gradient(70% 90% at 0% 100%, rgba(34, 211, 238, 0.28), transparent 60%),
+      var(--night-900);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .bento__card--cta .eyebrow {
+    margin-bottom: 0;
+  }
+
+  .bento__card--cta .bento__cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.4vw, 1.95rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .bento__card--cta .bento__cta-text {
+    color: var(--on-night-muted);
+    max-width: 52ch;
+  }
+
+  .bento__card--cta .btn {
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+
+  .bento__cta-glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    right: -60px;
+    bottom: -120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124, 92, 255, 0.5), transparent 70%);
+    filter: blur(30px);
+    animation: drift 14s var(--ease-in-out) infinite;
+    pointer-events: none;
+  }
+</style>

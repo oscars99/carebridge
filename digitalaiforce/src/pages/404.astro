@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { services, serviceUrl } from '../data/services';
+---
+
+<BaseLayout
+  title="Page Not Found | Digital AI Force"
+  description="Sorry, we couldn’t find that page. Explore our services or head back home."
+  noindex
+>
+  <section class="nf theme-dark" aria-labelledby="nf-title">
+    <div class="nf__bg" aria-hidden="true">
+      <div class="bg-grid"></div>
+      <div class="orb orb--violet nf__orb nf__orb--1"></div>
+      <div class="orb orb--cyan nf__orb nf__orb--2"></div>
+    </div>
+    <div class="container nf__inner">
+      <p class="nf__code enter" aria-hidden="true">404</p>
+      <h1 id="nf-title" class="enter" style="--d: 1">This page took a <span class="text-gradient">wrong turn</span></h1>
+      <p class="lead enter" style="--d: 2">
+        The page you’re looking for may have moved or no longer exists. Let’s get you back on track.
+      </p>
+      <div class="btn-row nf__actions enter" style="--d: 3">
+        <a href="/" class="btn btn--primary btn--lg">Back to home <Icon name="arrow-right" class="icon--move" /></a>
+        <a href="/contact/" class="btn btn--ghost btn--lg">Contact us</a>
+      </div>
+      <nav class="nf__links enter" style="--d: 4" aria-label="Popular pages">
+        <p>Popular pages</p>
+        <ul role="list">
+          {
+            services.slice(0, 6).map((s) => (
+              <li>
+                <a href={serviceUrl(s.slug)}>
+                  <Icon name={s.icon} size={18} />
+                  {s.navLabel}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href="/pricing/"><Icon name="badge-dollar-sign" size={18} />Pricing</a>
+          </li>
+          <li>
+            <a href="/blog/"><Icon name="book-open" size={18} />Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    align-items: center;
+    padding: calc(var(--header-h) + 48px) 0 80px;
+    text-align: center;
+  }
+
+  .nf__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .nf__orb--1 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    left: 10%;
+    animation: drift 20s var(--ease-in-out) infinite;
+  }
+
+  .nf__orb--2 {
+    width: 480px;
+    height: 480px;
+    bottom: -200px;
+    right: 5%;
+    opacity: 0.35;
+    animation: drift 24s var(--ease-in-out) infinite reverse;
+  }
+
+  .nf__inner {
+    max-width: 860px;
+  }
+
+  .nf__code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 22vw, 13rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    background: var(--grad-text-on-dark);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation:
+      enter-up 1s var(--ease-out) both,
+      gradient-pan 6s var(--ease-in-out) infinite alternate;
+  }
+
+  .nf h1 {
+    margin-top: 12px;
+  }
+
+  .nf .lead {
+    margin: 18px auto 0;
+  }
+
+  .nf__actions {
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .nf__links {
+    margin-top: 48px;
+  }
+
+  .nf__links p {
+    margin-bottom: 14px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-night-muted);
+  }
+
+  .nf__links ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nf__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.94rem;
+    color: var(--on-night);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition:
+      border-color var(--dur) ease,
+      background-color var(--dur) ease;
+  }
+
+  .nf__links a :global(.icon) {
+    color: var(--violet-300);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nf__links a:hover {
+      border-color: rgba(196, 181, 253, 0.55);
+      background: rgba(255, 255, 255, 0.09);
+    }
+  }
+</style>

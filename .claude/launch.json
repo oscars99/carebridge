@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "4173", "--directory", "."],
       "port": 4173
+    },
+    {
+      "name": "digitalaiforce-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "digitalaiforce", "run", "dev", "--", "--port", "4321", "--host", "127.0.0.1"],
+      "port": 4321
     }
   ]
 }

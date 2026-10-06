@@ -1,0 +1,94 @@
+---
+/** Digital AI Force logo: gradient "spark" mark + wordmark. */
+interface Props {
+  /** Unique suffix so multiple logos on one page don't share gradient IDs. */
+  id?: string;
+  showText?: boolean;
+  size?: number;
+}
+
+const { id = 'logo', showText = true, size = 36 } = Astro.props;
+const gradientId = `daf-grad-${id}`;
+---
+
+<span class="logo">
+  <svg class="logo__mark" width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id={gradientId} x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#7c5cff"></stop>
+        <stop offset="0.55" stop-color="#3b82f6"></stop>
+        <stop offset="1" stop-color="#22d3ee"></stop>
+      </linearGradient>
+    </defs>
+    <rect width="32" height="32" rx="9" fill={`url(#${gradientId})`}></rect>
+    <path
+      class="logo__spark"
+      d="M14.6 7.2c.7 5.3 3.3 7.9 8.6 8.6-5.3.7-7.9 3.3-8.6 8.6-.7-5.3-3.3-7.9-8.6-8.6 5.3-.7 7.9-3.3 8.6-8.6Z"
+      fill="#fff"></path>
+    <path
+      class="logo__spark logo__spark--small"
+      d="M23.6 4.6c.25 1.85 1.15 2.75 3 3-1.85.25-2.75 1.15-3 3-.25-1.85-1.15-2.75-3-3 1.85-.25 2.75-1.15 3-3Z"
+      fill="#fff"
+      fill-opacity="0.85"></path>
+  </svg>
+  {
+    showText && (
+      <span class="logo__text">
+        Digital <span class="logo__ai">AI</span> Force
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: -0.03em;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .logo__mark {
+    flex: none;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px -6px rgba(91, 61, 245, 0.7);
+  }
+
+  .logo__spark {
+    transform-origin: 14.6px 15.8px;
+    transition: transform 0.6s var(--ease-spring);
+  }
+
+  .logo__spark--small {
+    transform-origin: 23.6px 7.6px;
+  }
+
+  .logo__ai {
+    background: var(--grad-text-on-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    :global(a:hover) > .logo .logo__spark {
+      transform: rotate(90deg) scale(1.06);
+    }
+
+    :global(a:hover) > .logo .logo__spark--small {
+      transform: rotate(-90deg) scale(1.2);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .logo__ai {
+      color: CanvasText;
+      background: none;
+    }
+  }
+</style>

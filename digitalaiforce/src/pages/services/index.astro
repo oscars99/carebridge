@@ -1,0 +1,391 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServicesBento from '../../components/ServicesBento.astro';
+import ProcessSteps from '../../components/ProcessSteps.astro';
+import CTABand from '../../components/CTABand.astro';
+import Icon from '../../components/Icon.astro';
+import { services, serviceUrl, getService } from '../../data/services';
+import { processSteps } from '../../data/home';
+import { absoluteUrl, breadcrumbNode } from '../../lib/schema';
+
+const path = '/services/';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path },
+];
+
+const goals = [
+  {
+    key: 'leads',
+    label: 'Get more calls & leads',
+    icon: 'phone',
+    text: 'A fast, persuasive website plus search and ads that put you in front of people ready to buy.',
+    picks: ['web-design-development', 'seo', 'ppc-advertising'],
+  },
+  {
+    key: 'brand',
+    label: 'Look more professional',
+    icon: 'gem',
+    text: 'A sharp brand identity and a modern website that make you the obvious, trustworthy choice.',
+    picks: ['branding-ui-ux-design', 'web-design-development', 'digital-marketing'],
+  },
+  {
+    key: 'sell',
+    label: 'Sell products online',
+    icon: 'shopping-bag',
+    text: 'A store built to convert, then traffic from search, ads and email to keep orders coming.',
+    picks: ['ecommerce-development', 'ppc-advertising', 'digital-marketing'],
+  },
+  {
+    key: 'time',
+    label: 'Save time with AI',
+    icon: 'bot',
+    text: 'Chat assistants and automations that answer customers, follow up on leads and handle busywork.',
+    picks: ['ai-automation', 'digital-marketing', 'web-design-development'],
+  },
+  {
+    key: 'app',
+    label: 'Launch an app',
+    icon: 'smartphone',
+    text: 'A well-designed iOS & Android app — from a lean MVP to a full customer app with bookings and rewards.',
+    picks: ['mobile-app-development', 'branding-ui-ux-design', 'ai-automation'],
+  },
+];
+
+const reasons = [
+  {
+    icon: 'handshake',
+    title: 'One accountable team',
+    text: 'No more chasing a web designer, an SEO freelancer and an ads agency. One team owns the results.',
+  },
+  {
+    icon: 'workflow',
+    title: 'Everything connected',
+    text: 'Your website, SEO, ads, email and CRM are built to work together — so no lead slips through.',
+  },
+  {
+    icon: 'zap',
+    title: 'Faster with AI',
+    text: 'AI-assisted workflows help us deliver more in less time, and we pass those savings on to you.',
+  },
+  {
+    icon: 'chart-column-increasing',
+    title: 'Plain-English reporting',
+    text: 'Clear monthly reports tied to calls, leads and sales — not confusing vanity metrics.',
+  },
+];
+
+const itemList = {
+  '@type': 'ItemList',
+  '@id': `${absoluteUrl(path)}#services`,
+  name: 'Digital AI Force services',
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: absoluteUrl(serviceUrl(s.slug)),
+    name: s.name,
+  })),
+};
+---
+
+<BaseLayout
+  title="Digital Marketing & Web Development Services | Digital AI Force"
+  description="Web design, SEO, digital marketing, Google & Meta ads, mobile apps, e-commerce, branding and AI automation for small businesses — from one accountable team."
+  pageType="CollectionPage"
+  schema={[breadcrumbNode(path, crumbs), itemList]}
+>
+  <PageHero
+    eyebrow="Our services"
+    title="Digital services that help small businesses"
+    accent="grow faster"
+    intro="Websites, SEO, marketing, ads, mobile apps, e-commerce, branding and AI automation — everything you need to attract, convert and keep customers, delivered by one accountable team."
+    crumbs={crumbs}
+  >
+    <div class="btn-row hub-hero__ctas enter" style="--d: 4">
+      <a href="/contact/" class="btn btn--primary btn--lg">Get a free quote <Icon name="arrow-right" class="icon--move" /></a>
+      <a href="#goal-finder" class="btn btn--ghost btn--lg">Help me choose</a>
+    </div>
+  </PageHero>
+
+  <section class="section" aria-labelledby="all-services-title">
+    <div class="container">
+      <h2 id="all-services-title" class="sr-only">All services</h2>
+      <ServicesBento />
+    </div>
+  </section>
+
+  <section class="section theme-white" id="goal-finder" aria-labelledby="finder-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Service finder</p>
+        <h2 id="finder-title">What’s your <span class="text-gradient">#1 goal</span> right now?</h2>
+        <p class="lead">Pick a goal and we’ll show you the services that usually make the biggest difference.</p>
+      </div>
+
+      <div class="finder" data-tabs>
+        <div class="finder__goals" role="tablist" aria-label="Your main goal" data-reveal>
+          {
+            goals.map((g, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`goal-tab-${g.key}`}
+                aria-controls={`goal-panel-${g.key}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="finder__goal"
+                data-tab
+              >
+                <Icon name={g.icon} size={20} />
+                {g.label}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          goals.map((g, i) => (
+            <div
+              class="finder__panel"
+              role="tabpanel"
+              id={`goal-panel-${g.key}`}
+              aria-labelledby={`goal-tab-${g.key}`}
+              tabindex="0"
+              hidden={i !== 0}
+              data-tab-panel
+            >
+              <p class="finder__text">{g.text}</p>
+              <ol class="finder__picks" role="list">
+                {g.picks.map((slug, j) => {
+                  const s = getService(slug)!;
+                  return (
+                    <li class="finder__pick" style={`--i: ${j}`}>
+                      <span class="finder__rank">{j === 0 ? 'Start here' : `Then add #${j + 1}`}</span>
+                      <span class="icon-badge icon-badge--sm">
+                        <Icon name={s.icon} />
+                      </span>
+                      <a href={serviceUrl(s.slug)} class="finder__name stretched-link">
+                        {s.name}
+                      </a>
+                      <span class="finder__tag">{s.tagline}</span>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="why-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">Why one partner</p>
+          <h2 id="why-title">Better results when everything <span class="text-gradient">works together</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--i: 1">
+          Small businesses lose leads in the gaps between vendors. We close those gaps with one strategy, one team and one clear report.
+        </p>
+      </div>
+      <div class="grid grid-4">
+        {
+          reasons.map((r, i) => (
+            <article class="card lift reason" data-reveal style={`--i: ${i}`}>
+              <span class="icon-badge">
+                <Icon name={r.icon} />
+              </span>
+              <h3>{r.title}</h3>
+              <p>{r.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2 id="process-title">Simple process. <span class="text-gradient">Serious results.</span></h2>
+      </div>
+      <ProcessSteps steps={processSteps} />
+    </div>
+  </section>
+
+  <CTABand />
+</BaseLayout>
+
+<style>
+  .hub-hero__ctas {
+    margin-top: 32px;
+  }
+
+  .reason {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .reason h3 {
+    margin: 4px 0 0;
+  }
+
+  /* ---------- Goal finder ---------- */
+  .finder {
+    max-width: 980px;
+    margin-inline: auto;
+  }
+
+  .finder__goals {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .finder__goal {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    transition:
+      color var(--dur) ease,
+      background-color var(--dur) ease,
+      border-color var(--dur) ease,
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) ease;
+  }
+
+  .finder__goal :global(.icon) {
+    color: var(--violet-600);
+    transition: color var(--dur) ease;
+  }
+
+  .finder__goal[aria-selected='true'] {
+    color: #fff;
+    background: var(--grad-cta);
+    border-color: transparent;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .finder__goal[aria-selected='true'] :global(.icon) {
+    color: #fff;
+  }
+
+  .finder__goal:active {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .finder__goal:not([aria-selected='true']):hover {
+      border-color: var(--violet-500);
+      transform: translateY(-2px);
+    }
+  }
+
+  .finder__panel {
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: var(--radius-xl);
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  .finder__panel:not([hidden]) {
+    animation: enter-up 0.5s var(--ease-out);
+  }
+
+  .finder__text {
+    margin-bottom: 20px;
+    font-size: 1.08rem;
+    text-align: center;
+    color: var(--ink-muted);
+  }
+
+  .finder__picks {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 800px) {
+    .finder__picks {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .finder__pick {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 22px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    animation: enter-up 0.6s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 90ms);
+    transition:
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out),
+      border-color var(--dur) ease;
+  }
+
+  .finder__pick:first-child {
+    border-color: rgba(124, 92, 255, 0.45);
+    box-shadow: 0 20px 40px -26px rgba(91, 61, 245, 0.6);
+  }
+
+  .finder__rank {
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--violet-600);
+  }
+
+  .finder__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.12rem;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .finder__name:focus-visible {
+    outline: none;
+  }
+
+  .finder__pick:has(.finder__name:focus-visible) {
+    outline: 2px solid var(--violet-500);
+    outline-offset: 3px;
+  }
+
+  .finder__tag {
+    font-size: 0.94rem;
+    color: var(--ink-muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .finder__pick:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+</style>

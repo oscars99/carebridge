@@ -1,0 +1,300 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts, postUrl, readingTime, formatDate, type Post } from '../../lib/blog';
+import { getService, serviceUrl } from '../../data/services';
+import { articleNode, breadcrumbNode } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const path = postUrl(post);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path: '/blog/' },
+  { name: post.data.title, path },
+];
+const minutes = readingTime(post.body);
+const toc = headings.filter((h) => h.depth === 2);
+const service = post.data.relatedService ? getService(post.data.relatedService) : undefined;
+const more = (await getPosts()).filter((p) => p.id !== post.id).slice(0, 2);
+const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
+---
+
+<BaseLayout
+  title={title}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={post.data.pubDate}
+  modifiedTime={post.data.updatedDate ?? post.data.pubDate}
+  schema={[
+    articleNode({
+      path,
+      title: post.data.title,
+      description: post.data.description,
+      published: post.data.pubDate,
+      updated: post.data.updatedDate,
+    }),
+    breadcrumbNode(path, crumbs),
+  ]}
+>
+  <header class="post-hero theme-dark">
+    <div class="post-hero__bg" aria-hidden="true">
+      <div class="bg-grid"></div>
+      <div class="orb orb--violet post-hero__orb"></div>
+    </div>
+    <div class="container container--narrow post-hero__inner">
+      <div class="enter"><Breadcrumbs crumbs={crumbs} /></div>
+      <p class="eyebrow enter" style="--d: 1">{post.data.category}</p>
+      <h1 class="enter" style="--d: 2">{post.data.title}</h1>
+      <p class="lead enter" style="--d: 3">{post.data.description}</p>
+      <p class="post-hero__meta enter" style="--d: 4">
+        <span><Icon name="calendar-days" size={16} /> <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>
+        <span><Icon name="clock" size={16} /> {minutes} min read</span>
+        <span><Icon name="pen-tool" size={16} /> Digital AI Force team</span>
+      </p>
+    </div>
+  </header>
+
+  <div class="section theme-white post-body">
+    <div class="container post-layout">
+      <article class="prose post-content">
+        <Content />
+      </article>
+
+      <aside class="post-aside" aria-label="Article tools">
+        {
+          toc.length > 0 && (
+            <nav class="toc card" aria-label="On this page">
+              <p class="toc__title">On this page</p>
+              <ol role="list">
+                {toc.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )
+        }
+        {
+          service && (
+            <div class="aside-cta card theme-dark">
+              <span class="icon-badge icon-badge--sm">
+                <Icon name={service.icon} />
+              </span>
+              <p class="aside-cta__title">Want expert help with {service.name}?</p>
+              <p>{service.summary}</p>
+              <a href={serviceUrl(service.slug)} class="btn btn--light btn--sm">
+                Learn more<span class="sr-only"> about {service.name}</span> <Icon name="arrow-right" class="icon--move" />
+              </a>
+            </div>
+          )
+        }
+      </aside>
+    </div>
+  </div>
+
+  {
+    more.length > 0 && (
+      <section class="section" aria-labelledby="more-title">
+        <div class="container">
+          <div class="section-head section-head--split">
+            <div data-reveal>
+              <p class="eyebrow">Keep reading</p>
+              <h2 id="more-title">
+                More <span class="text-gradient">guides</span>
+              </h2>
+            </div>
+            <a href="/blog/" class="link-arrow" data-reveal>
+              All articles <Icon name="arrow-right" />
+            </a>
+          </div>
+          <div class="more">
+            {more.map((p, i) => (
+              <PostCard post={p} index={i} headingLevel="h3" />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .post-hero {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 72px));
+    padding-bottom: clamp(48px, 6vw, 80px);
+  }
+
+  .post-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .post-hero__orb {
+    width: 560px;
+    height: 560px;
+    top: -260px;
+    right: -100px;
+    opacity: 0.5;
+    animation: drift 22s var(--ease-in-out) infinite;
+  }
+
+  .post-hero :global(.crumbs) {
+    margin-bottom: 24px;
+  }
+
+  .post-hero :global(.crumbs li:last-child) {
+    display: none;
+  }
+
+  .post-hero h1 {
+    font-size: clamp(2rem, 4.4vw, 3.3rem);
+    color: #fff;
+  }
+
+  .post-hero .lead {
+    margin-top: 18px;
+  }
+
+  .post-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-top: 26px;
+    font-size: 0.92rem;
+    color: var(--on-night-muted);
+  }
+
+  .post-hero__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .post-hero__meta :global(.icon) {
+    color: var(--violet-300);
+  }
+
+  .post-body {
+    padding-top: clamp(48px, 6vw, 72px);
+  }
+
+  .post-layout {
+    display: grid;
+    gap: 48px;
+  }
+
+  @media (min-width: 1080px) {
+    .post-layout {
+      grid-template-columns: minmax(0, 720px) 300px;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .post-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+
+  .post-content :global(h2) {
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  .post-aside {
+    display: grid;
+    gap: 20px;
+  }
+
+  .toc {
+    padding: 22px;
+  }
+
+  .toc__title {
+    margin-bottom: 12px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--violet-600);
+  }
+
+  .toc ol {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 10px;
+    font-size: 0.93rem;
+    line-height: 1.4;
+    color: var(--ink-muted);
+    transition:
+      color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease;
+  }
+
+  .toc a:hover,
+  .toc a.is-current {
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  .post-aside .aside-cta {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    background:
+      radial-gradient(100% 120% at 100% 0%, rgba(124, 92, 255, 0.5), transparent 60%),
+      var(--night-900);
+    border-color: transparent;
+  }
+
+  .aside-cta .aside-cta__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    color: #fff;
+  }
+
+  .aside-cta p:not(.aside-cta__title) {
+    font-size: 0.93rem;
+  }
+
+  .more {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  }
+
+  @media (min-width: 1080px) {
+    .toc {
+      max-height: calc(100vh - var(--header-h) - 220px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+</style>

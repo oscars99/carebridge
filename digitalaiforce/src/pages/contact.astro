@@ -1,0 +1,244 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import FAQ from '../components/FAQ.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+import { breadcrumbNode, faqNode } from '../lib/schema';
+
+const path = '/contact/';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Contact', path },
+];
+
+const nextSteps = [
+  { title: 'We review your message', text: `A real person reads every inquiry and replies ${site.responseTime}.` },
+  { title: 'Free strategy call', text: 'A relaxed 30-minute call to understand your goals, plus a quick look at your current setup.' },
+  { title: 'Clear plan & fixed quote', text: 'You get honest recommendations and a written quote. No pressure, no obligation.' },
+];
+
+const faqs = [
+  {
+    q: 'Is the strategy call really free?',
+    a: 'Yes — completely free and with no obligation. You’ll walk away with practical ideas you can use whether or not you decide to work with us.',
+  },
+  {
+    q: 'Do I need to know exactly what I want?',
+    a: 'Not at all. Tell us about your business and goals, and we’ll recommend the few services that will make the biggest difference.',
+  },
+  {
+    q: 'What should I prepare before our call?',
+    a: 'Nothing formal. It helps to have your website address (if you have one), a rough idea of your budget and timeline, and a few competitors or sites you like.',
+  },
+];
+---
+
+<BaseLayout
+  title="Contact Us — Get a Free Quote | Digital AI Force"
+  description="Tell us about your business and goals. Get a free strategy call and a fixed, written quote for your website, SEO, marketing, app or AI project."
+  pageType="ContactPage"
+  schema={[breadcrumbNode(path, crumbs), faqNode(path, faqs)]}
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Let’s grow your business"
+    accent="together"
+    intro={`Tell us a little about your business and what you’d like to achieve. We’ll reply ${site.responseTime} with next steps — usually a free strategy call.`}
+    crumbs={crumbs}
+  />
+
+  <section class="section contact-page" aria-labelledby="form-title">
+    <div class="container contact-page__grid">
+      <div class="contact-page__form card" data-reveal="scale">
+        <h2 id="form-title" class="contact-page__title">Request your free quote</h2>
+        <p class="contact-page__sub">Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required.</p>
+        <ContactForm id="contact" />
+      </div>
+
+      <aside class="contact-page__aside" aria-label="What to expect">
+        <div class="card next" data-reveal style="--i: 1">
+          <h2 class="next__title">What happens next</h2>
+          <ol class="next__list" role="list">
+            {
+              nextSteps.map((step, i) => (
+                <li>
+                  <span class="next__num" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="card direct theme-dark" data-reveal style="--i: 2">
+          <h2 class="next__title">Prefer email?</h2>
+          <a href={`mailto:${site.email}`} class="direct__link">
+            <Icon name="mail" size={20} />
+            {site.email}
+          </a>
+          {
+            site.phone && (
+              <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`} class="direct__link">
+                <Icon name="phone" size={20} />
+                {site.phone}
+              </a>
+            )
+          }
+          {
+            site.location && (
+              <p class="direct__link">
+                <Icon name="map-pin" size={20} />
+                {site.location}
+              </p>
+            )
+          }
+          <p class="direct__note">
+            <Icon name="clock" size={18} /> We reply {site.responseTime}.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="contact-faq-title">
+    <div class="container container--narrow">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Before you reach out</p>
+        <h2 id="contact-faq-title">Quick <span class="text-gradient">answers</span></h2>
+      </div>
+      <FAQ faqs={faqs} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding-top: clamp(48px, 6vw, 80px);
+  }
+
+  .contact-page__grid {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .contact-page__grid {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
+    }
+
+    .contact-page__aside {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+
+  .contact-page__form {
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+  }
+
+  .contact-page__title {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+  }
+
+  .contact-page__sub {
+    margin: 8px 0 26px;
+    font-size: 0.95rem;
+  }
+
+  .contact-page__sub span[aria-hidden] {
+    color: var(--violet-500);
+  }
+
+  .contact-page__aside {
+    display: grid;
+    gap: 20px;
+  }
+
+  .next__title {
+    margin-bottom: 18px;
+    font-size: 1.3rem;
+  }
+
+  .next__list {
+    display: grid;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .next__list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .next__list h3 {
+    font-size: 1.02rem;
+    margin-bottom: 2px;
+  }
+
+  .next__list p {
+    font-size: 0.95rem;
+  }
+
+  .next__num {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: #fff;
+    background: var(--grad-cta);
+  }
+
+  .contact-page .direct {
+    display: grid;
+    gap: 12px;
+    background:
+      radial-gradient(100% 120% at 100% 0%, rgba(124, 92, 255, 0.45), transparent 60%),
+      var(--night-900);
+    border-color: transparent;
+  }
+
+  .direct .next__title {
+    margin-bottom: 4px;
+  }
+
+  .direct .direct__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #fff;
+    overflow-wrap: anywhere;
+  }
+
+  .direct__link :global(.icon),
+  .direct__note :global(.icon) {
+    flex: none;
+    color: var(--violet-300);
+  }
+
+  .direct__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.92rem;
+  }
+</style>

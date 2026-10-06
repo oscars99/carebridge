@@ -1,0 +1,116 @@
+---
+/**
+ * Accessible FAQ accordion built on native <details>/<summary> (works without JS;
+ * JS adds smooth height animation). Pair with faqNode() in the page schema.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  faqs: { q: string; a: string }[];
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { faqs, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div class="faq">
+  {
+    faqs.map((f, i) => (
+      <details class="faq__item" data-accordion data-reveal style={`--i: ${i % 4}`}>
+        <summary class="faq__q">
+          <Heading class="faq__title">{f.q}</Heading>
+          <span class="faq__icon" aria-hidden="true">
+            <Icon name="plus" size={20} strokeWidth={2.2} />
+          </span>
+        </summary>
+        <div class="faq__a" data-accordion-content>
+          <p>{f.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: grid;
+    gap: 12px;
+  }
+
+  .faq__item {
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition:
+      border-color var(--dur) ease,
+      box-shadow var(--dur) ease,
+      background-color var(--dur) ease;
+  }
+
+  .faq__item[open] {
+    border-color: rgba(124, 92, 255, 0.35);
+    box-shadow: 0 20px 40px -28px rgba(91, 61, 245, 0.45);
+  }
+
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 22px;
+    cursor: pointer;
+    list-style: none;
+    border-radius: 20px;
+  }
+
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__title {
+    font-size: clamp(1.02rem, 1.4vw, 1.12rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--accent);
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    transition:
+      transform 0.4s var(--ease-spring),
+      background 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(135deg);
+    color: #fff;
+    background: var(--grad-cta);
+    border-color: transparent;
+  }
+
+  .faq__a {
+    overflow: hidden;
+  }
+
+  .faq__a p {
+    padding: 0 22px 22px;
+    color: var(--text-muted);
+    max-width: 75ch;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .faq__item:not([open]):hover {
+      border-color: rgba(124, 92, 255, 0.3);
+    }
+  }
+</style>

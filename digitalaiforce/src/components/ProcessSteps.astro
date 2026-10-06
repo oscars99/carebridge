@@ -1,0 +1,189 @@
+---
+import Icon from './Icon.astro';
+
+interface Step {
+  title: string;
+  text: string;
+  icon?: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="process" data-process style={`--steps: ${steps.length}`}>
+  <div class="process__rail" aria-hidden="true"><span class="process__fill"></span></div>
+  <ol class="process__list" role="list">
+    {
+      steps.map((step, i) => (
+        <li class="process__step" data-reveal style={`--i: ${i}`} data-step>
+          <span class="process__marker" aria-hidden="true">
+            {step.icon ? <Icon name={step.icon} size={22} /> : <span>{String(i + 1).padStart(2, '0')}</span>}
+          </span>
+          <div class="process__body">
+            <span class="process__num">Step {String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .process {
+    --marker: 56px;
+    --gap: 32px;
+    position: relative;
+  }
+
+  .process__list {
+    display: grid;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process__rail {
+    position: absolute;
+    top: calc(var(--marker) / 2);
+    bottom: 12px;
+    left: calc(var(--marker) / 2 - 1px);
+    width: 2px;
+    border-radius: 2px;
+    background: var(--border);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
+    mask-image: linear-gradient(180deg, #000 85%, transparent);
+  }
+
+  .process__fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--violet-500), var(--blue-500), var(--cyan-400));
+    transform: scaleY(var(--progress, 0));
+    transform-origin: top;
+    transition: transform 0.15s linear;
+  }
+
+  .process__step {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .process__marker {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--marker);
+    height: var(--marker);
+    border-radius: 18px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition:
+      color 0.4s ease,
+      background-color 0.4s ease,
+      border-color 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.5s var(--ease-spring);
+  }
+
+  .process__marker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--grad-cta);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+  }
+
+  .process__step.is-active .process__marker {
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--shadow-glow);
+    transform: scale(1.06);
+  }
+
+  .process__step.is-active .process__marker::before {
+    opacity: 1;
+  }
+
+  .process__body {
+    padding-top: 4px;
+  }
+
+  .process__num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .process__step h3 {
+    margin: 6px 0 6px;
+  }
+
+  .process__step p {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+    max-width: 46ch;
+  }
+
+  @media (min-width: 900px) {
+    .process__list {
+      grid-template-columns: repeat(var(--steps), 1fr);
+      gap: var(--gap);
+    }
+
+    .process__rail {
+      top: calc(var(--marker) / 2 - 1px);
+      bottom: auto;
+      left: calc(var(--marker) / 2);
+      right: calc((100% - (var(--steps) - 1) * var(--gap)) / var(--steps) - var(--marker) / 2);
+      width: auto;
+      height: 2px;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .process__fill {
+      background: linear-gradient(90deg, var(--violet-500), var(--blue-500), var(--cyan-400));
+      transform: scaleX(var(--progress, 0));
+      transform-origin: left;
+    }
+
+    .process__step {
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .process__body {
+      padding-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process__fill {
+      transform: none;
+    }
+  }
+</style>

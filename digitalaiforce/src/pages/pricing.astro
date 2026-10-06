@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PricingPlans from '../components/PricingPlans.astro';
+import FAQ from '../components/FAQ.astro';
+import CTABand from '../components/CTABand.astro';
+import Icon from '../components/Icon.astro';
+import { getService, serviceUrl } from '../data/services';
+import { breadcrumbNode, faqNode } from '../lib/schema';
+
+const path = '/pricing/';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Pricing', path },
+];
+
+const custom = ['mobile-app-development', 'ai-automation', 'branding-ui-ux-design'].map((slug) => getService(slug)!);
+
+const included = [
+  { icon: 'phone', title: 'Free strategy call', text: 'We learn your goals and share quick wins before you spend a cent.' },
+  { icon: 'file-text', title: 'Fixed written quote', text: 'You approve the scope and price up front — no surprise invoices.' },
+  { icon: 'key-round', title: 'You own everything', text: 'Domain, website, content, ad accounts and data belong to you.' },
+  { icon: 'smartphone', title: 'Mobile-first & SEO-ready', text: 'Every build is fast, responsive and structured to rank.' },
+  { icon: 'chart-column-increasing', title: 'Plain-English reporting', text: 'Clear updates tied to calls, leads and sales.' },
+  { icon: 'calendar-check', title: 'No long-term contracts', text: 'Monthly plans are month-to-month. Stay because it works.' },
+];
+
+const faqs = [
+  {
+    q: 'Why do you show “from” prices?',
+    a: 'Every business is different. The “from” price is where projects in that package typically start; your final fixed quote depends on the number of pages, features and integrations you need. You’ll always approve a written quote before any work begins.',
+  },
+  {
+    q: 'Is ad spend included in the monthly plans?',
+    a: 'No. Ad spend is paid directly to Google or Meta from your own ad account, so you keep full control and visibility. Our plans cover strategy, setup, creative and ongoing management.',
+  },
+  {
+    q: 'Can I cancel a monthly plan?',
+    a: 'Yes. Monthly plans are month-to-month with no long-term contract. If you ever decide to move on, you keep your website, content, accounts and data.',
+  },
+  {
+    q: 'Do you offer custom packages?',
+    a: 'Absolutely. Many clients combine a website project with a monthly plan, or add mobile app development, AI automation or branding. Tell us what you need and we’ll put together a custom quote.',
+  },
+  {
+    q: 'What if I’m just getting started and my budget is small?',
+    a: 'We love working with new businesses. On your free strategy call we’ll help you prioritize the few things that will make the biggest difference now, and plan the rest for when you’re ready.',
+  },
+  {
+    q: 'Are hosting and domain costs included?',
+    a: 'Domains are registered in your name and billed by the registrar. Hosting, security and updates can be covered by our Website Care plan, or we can launch on hosting you already own.',
+  },
+];
+---
+
+<BaseLayout
+  title="Pricing — Websites, SEO & Marketing Plans | Digital AI Force"
+  description="Transparent pricing for small businesses: fixed-price websites, month-to-month SEO and growth plans, and custom quotes for apps and AI automation."
+  schema={[breadcrumbNode(path, crumbs), faqNode(path, faqs)]}
+>
+  <PageHero
+    eyebrow="Pricing"
+    title="Simple, transparent pricing for"
+    accent="small businesses"
+    intro="Fixed-price website projects, month-to-month growth plans and custom quotes for apps and AI. Every engagement starts with a free strategy call — and a written quote before any work begins."
+    crumbs={crumbs}
+    align="center"
+  />
+
+  <section class="section pricing-page" aria-labelledby="plans-title">
+    <div class="container">
+      <h2 id="plans-title" class="sr-only">Plans and packages</h2>
+      <PricingPlans id="pricing-page" />
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="custom-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">Custom solutions</p>
+          <h2 id="custom-title">Apps, AI &amp; branding — <span class="text-gradient">quoted to fit</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--i: 1">
+          These projects vary widely in scope, so we quote them individually after a free discovery call — always as a fixed price.
+        </p>
+      </div>
+      <div class="grid grid-3">
+        {
+          custom.map((s, i) => (
+            <article class="card spotlight lift custom" data-reveal style={`--i: ${i}`}>
+              <span class="icon-badge">
+                <Icon name={s.icon} />
+              </span>
+              <h3>
+                <a href={serviceUrl(s.slug)} class="stretched-link">
+                  {s.name}
+                </a>
+              </h3>
+              <p>{s.summary}</p>
+              <p class="custom__note">
+                <Icon name="badge-dollar-sign" size={18} /> {s.pricingNote}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="included-title">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Always included</p>
+        <h2 id="included-title">Every plan comes with <span class="text-gradient">peace of mind</span></h2>
+      </div>
+      <ul class="included" role="list">
+        {
+          included.map((item, i) => (
+            <li class="included__item" data-reveal style={`--i: ${i % 3}`}>
+              <span class="icon-badge icon-badge--sm">
+                <Icon name={item.icon} />
+              </span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section theme-white" aria-labelledby="pricing-faq-title">
+    <div class="container container--narrow">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Pricing FAQ</p>
+        <h2 id="pricing-faq-title">Good questions to <span class="text-gradient">ask before you buy</span></h2>
+      </div>
+      <FAQ faqs={faqs} />
+    </div>
+  </section>
+
+  <CTABand
+    title="Get a fixed quote for"
+    accent="your project"
+    text="Tell us what you need and we’ll send a clear, written quote — usually within a few business days of your free strategy call."
+    primaryLabel="Request my free quote"
+  />
+</BaseLayout>
+
+<style>
+  .pricing-page {
+    padding-top: clamp(48px, 6vw, 80px);
+  }
+
+  .custom {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .custom h3 {
+    margin: 4px 0 0;
+  }
+
+  .custom h3 a:focus-visible {
+    outline: none;
+  }
+
+  .custom:has(.stretched-link:focus-visible) {
+    outline: 2px solid var(--violet-500);
+    outline-offset: 3px;
+  }
+
+  .card .custom__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .custom__note :global(.icon) {
+    color: var(--violet-600);
+  }
+
+  .included {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 28px 32px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .included__item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .included__item h3 {
+    font-size: 1.08rem;
+    margin-bottom: 4px;
+  }
+
+  .included__item p {
+    color: var(--text-muted);
+    font-size: 0.97rem;
+  }
+</style>

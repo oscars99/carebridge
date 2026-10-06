@@ -1,0 +1,259 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { services, serviceUrl } from '../data/services';
+import { site } from '../config/site';
+
+const year = new Date().getFullYear();
+const company = [
+  { label: 'About us', href: '/about/' },
+  { label: 'Pricing', href: '/pricing/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Contact', href: '/contact/' },
+];
+const legal = [
+  { label: 'Privacy policy', href: '/privacy/' },
+  { label: 'Terms of service', href: '/terms/' },
+  { label: 'Sitemap', href: '/sitemap-index.xml' },
+];
+---
+
+<footer class="site-footer theme-dark">
+  <div class="glow-line" aria-hidden="true"></div>
+  <div class="bg-grid site-footer__grid-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" aria-label={`${site.name} — home`} class="site-footer__logo"><Logo id="footer" /></a>
+        <p class="site-footer__tagline">
+          AI-powered, human-led digital agency helping small businesses grow with websites, SEO, marketing, mobile apps and smart
+          automation.
+        </p>
+        <a href="/contact/" class="btn btn--primary btn--sm">
+          Get a free quote <Icon name="arrow-right" class="icon--move" />
+        </a>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Services">
+        <p class="site-footer__heading">Services</p>
+        <ul role="list">
+          {
+            services.map((s) => (
+              <li>
+                <a href={serviceUrl(s.slug)}>{s.navLabel}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="site-footer__col" aria-label="Company">
+        <p class="site-footer__heading">Company</p>
+        <ul role="list">
+          {
+            company.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="site-footer__heading site-footer__heading--spaced">Legal</p>
+        <ul role="list">
+          {
+            legal.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="site-footer__col">
+        <p class="site-footer__heading">Get in touch</p>
+        <ul role="list" class="site-footer__contact">
+          <li>
+            <a href={`mailto:${site.email}`}><Icon name="mail" size={18} />{site.email}</a>
+          </li>
+          {
+            site.phone && (
+              <li>
+                <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>
+                  <Icon name="phone" size={18} />
+                  {site.phone}
+                </a>
+              </li>
+            )
+          }
+          {
+            site.location && (
+              <li>
+                <span>
+                  <Icon name="map-pin" size={18} />
+                  {site.location}
+                </span>
+              </li>
+            )
+          }
+          <li>
+            <span><Icon name="clock" size={18} />Replies {site.responseTime}</span>
+          </li>
+        </ul>
+        {
+          site.socials.length > 0 && (
+            <ul role="list" class="site-footer__socials">
+              {site.socials.map((s) => (
+                <li>
+                  <a href={s.href} rel="noopener me" target="_blank">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="site-footer__wordmark" aria-hidden="true">Digital AI Force</div>
+
+    <div class="site-footer__bottom">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p>Websites · SEO · Marketing · Apps · AI</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(64px, 8vw, 96px);
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+  }
+
+  .site-footer > .glow-line {
+    position: absolute;
+    inset: 0 0 auto;
+  }
+
+  .site-footer__grid-bg {
+    opacity: 0.5;
+  }
+
+  .site-footer .container {
+    position: relative;
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: 40px 32px;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__top {
+      grid-template-columns: 1.5fr 1fr 0.8fr 1.1fr;
+    }
+  }
+
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    max-width: 360px;
+  }
+
+  .site-footer__logo {
+    border-radius: 12px;
+  }
+
+  .site-footer__tagline {
+    color: var(--on-night-muted);
+    font-size: 0.98rem;
+  }
+
+  .site-footer__heading {
+    margin-bottom: 14px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .site-footer__heading--spaced {
+    margin-top: 28px;
+  }
+
+  .site-footer__col ul {
+    display: grid;
+    gap: 4px;
+  }
+
+  .site-footer__col a,
+  .site-footer__contact span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 34px;
+    color: var(--on-night-muted);
+    font-size: 0.97rem;
+    transition: color var(--dur-fast) ease;
+  }
+
+  .site-footer__contact :global(.icon) {
+    color: var(--violet-300);
+    flex: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .site-footer__col a:hover {
+      color: #fff;
+    }
+  }
+
+  .site-footer__socials {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 8px 16px !important;
+    margin-top: 12px;
+  }
+
+  .site-footer__wordmark {
+    margin-top: clamp(48px, 7vw, 88px);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3rem, 13.5vw, 11.5rem);
+    line-height: 0.85;
+    letter-spacing: -0.055em;
+    text-align: center;
+    white-space: nowrap;
+    background: linear-gradient(180deg, rgba(196, 181, 253, 0.22) 0%, rgba(96, 165, 250, 0.08) 70%, transparent 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 24px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.88rem;
+    color: var(--on-night-muted);
+  }
+</style>

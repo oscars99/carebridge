@@ -1,0 +1,353 @@
+---
+import Icon from './Icon.astro';
+import { websitePlans, monthlyPlans, pricingFootnote, type Plan } from '../data/pricing';
+
+interface Props {
+  /** Unique prefix so the component can appear once per page with stable IDs. */
+  id?: string;
+}
+
+const { id = 'pricing' } = Astro.props;
+const groups: { key: string; label: string; plans: Plan[] }[] = [
+  { key: 'websites', label: 'Website projects', plans: websitePlans },
+  { key: 'monthly', label: 'Monthly growth plans', plans: monthlyPlans },
+];
+---
+
+<div class="pricing" data-tabs>
+  <div class="pricing__tabs-wrap" data-reveal>
+  <div class="pricing__tabs" role="tablist" aria-label="Pricing type">
+    <span class="pricing__indicator" aria-hidden="true" data-tab-indicator></span>
+    {
+      groups.map((g, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${g.key}`}
+          aria-controls={`${id}-panel-${g.key}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          class="pricing__tab"
+          data-tab
+        >
+          {g.label}
+        </button>
+      ))
+    }
+  </div>
+  </div>
+
+  {
+    groups.map((g, gi) => (
+      <div
+        class="pricing__panel"
+        role="tabpanel"
+        id={`${id}-panel-${g.key}`}
+        aria-labelledby={`${id}-tab-${g.key}`}
+        tabindex="0"
+        hidden={gi !== 0}
+        data-tab-panel
+      >
+        <div class="pricing__grid">
+          {g.plans.map((plan, i) => (
+            <article class:list={['plan', { 'plan--featured': plan.featured }]} data-reveal style={`--i: ${i}`}>
+              {plan.badge && <span class="plan__badge">{plan.badge}</span>}
+              <h3 class="plan__name">{plan.name}</h3>
+              <p class="plan__desc">{plan.description}</p>
+              <p class="plan__price">
+                {plan.prefix && <span class="plan__prefix">{plan.prefix}</span>}
+                <span class="plan__amount">{plan.price}</span>
+                <span class="plan__period">{plan.period}</span>
+              </p>
+              <ul class="plan__features" role="list">
+                {plan.features.map((f) => (
+                  <li>
+                    <Icon name="check" size={18} strokeWidth={2.4} />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`/contact/?plan=${encodeURIComponent(plan.name)}`}
+                class:list={['btn btn--block', plan.featured ? 'btn--primary' : 'btn--ghost']}
+              >
+                {plan.cta} <Icon name="arrow-right" class="icon--move" />
+              </a>
+            </article>
+          ))}
+        </div>
+        {g.key === 'monthly' && <p class="pricing__note">{pricingFootnote}</p>}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .pricing__tabs-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  .pricing__tabs {
+    position: relative;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pricing__indicator {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 0;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: var(--grad-cta);
+    box-shadow: var(--shadow-glow);
+    transform: translateX(var(--x, 5px));
+    transition:
+      transform 0.45s var(--ease-out),
+      width 0.45s var(--ease-out);
+  }
+
+  .pricing__tab {
+    position: relative;
+    z-index: 1;
+    min-height: 46px;
+    padding: 0 clamp(14px, 3vw, 26px);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.88rem, 1.6vw, 0.98rem);
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  .pricing__tab[aria-selected='true'] {
+    color: #fff;
+  }
+
+  /* No-JS / pre-JS fallback: highlight the selected tab without the sliding pill */
+  :global(html:not(.js)) .pricing__tab[aria-selected='true'] {
+    background: var(--grad-cta);
+  }
+
+  .pricing__panel:focus-visible {
+    outline-offset: 8px;
+    border-radius: var(--radius-lg);
+  }
+
+  .pricing__panel:not([hidden]) {
+    animation: panel-in 0.5s var(--ease-out);
+  }
+
+  .pricing__grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    align-items: stretch;
+  }
+
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: clamp(26px, 3vw, 34px);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out);
+  }
+
+  .plan--featured {
+    color: var(--on-night);
+    background:
+      radial-gradient(120% 70% at 100% 0%, rgba(124, 92, 255, 0.45), transparent 60%),
+      radial-gradient(80% 60% at 0% 100%, rgba(34, 211, 238, 0.18), transparent 60%),
+      var(--night-900);
+    border-color: transparent;
+    box-shadow: 0 40px 80px -40px rgba(91, 61, 245, 0.7);
+  }
+
+  /* Animated gradient border on the featured plan */
+  .plan--featured::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(from var(--angle, 0deg), #7c5cff, #3b82f6, #22d3ee, #7c5cff);
+    animation: border-spin 6s linear infinite;
+  }
+
+  .plan--featured {
+    isolation: isolate;
+  }
+
+  .plan--featured::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+  }
+
+  .plan__badge {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--night-950);
+    background: linear-gradient(110deg, #c4b5fd, #22d3ee);
+  }
+
+  .plan__name {
+    font-size: 1.25rem;
+    padding-right: 110px;
+  }
+
+  .plan--featured .plan__name {
+    color: #fff;
+  }
+
+  .plan__desc {
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    min-height: 3em;
+  }
+
+  .plan--featured .plan__desc {
+    color: var(--on-night-muted);
+  }
+
+  .plan__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-block: 10px 4px;
+    border-top: 1px solid var(--border);
+  }
+
+  .plan--featured .plan__price {
+    border-top-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .plan__prefix,
+  .plan__period {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  .plan--featured .plan__prefix,
+  .plan--featured .plan__period {
+    color: var(--on-night-muted);
+  }
+
+  .plan__amount {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.6vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .plan--featured .plan__amount {
+    color: #fff;
+  }
+
+  .plan__features {
+    display: grid;
+    gap: 10px;
+    margin: 0 0 8px;
+    padding: 0;
+    list-style: none;
+    font-size: 0.97rem;
+  }
+
+  .plan__features li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .plan__features :global(.icon) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--violet-600);
+  }
+
+  .plan--featured .plan__features :global(.icon) {
+    color: var(--cyan-400);
+  }
+
+  .plan .btn {
+    margin-top: auto;
+  }
+
+  .plan--featured .btn--primary {
+    background: linear-gradient(110deg, #ffffff, #e9e5ff);
+    color: var(--night-950);
+  }
+
+  .pricing__note {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .plan:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .plan--featured:hover {
+      box-shadow: 0 50px 90px -40px rgba(91, 61, 245, 0.85);
+    }
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes border-spin {
+    to {
+      --angle: 360deg;
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

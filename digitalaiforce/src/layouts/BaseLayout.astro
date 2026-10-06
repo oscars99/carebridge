@@ -1,0 +1,170 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/dm-sans';
+import '../styles/global.css';
+import spaceGroteskWoff2 from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import dmSansWoff2 from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config/site';
+import { absoluteUrl, graph, organizationNode, websiteNode, webPageNode } from '../lib/schema';
+
+interface Props {
+  /** Full <title>. Keep under ~60 characters. */
+  title: string;
+  /** Meta description. Keep under ~155 characters. */
+  description: string;
+  /** Social share image path (defaults to the site OG image). */
+  image?: string;
+  imageAlt?: string;
+  ogType?: 'website' | 'article';
+  /** schema.org type for the WebPage node, e.g. 'AboutPage', 'ContactPage', 'CollectionPage'. */
+  pageType?: string;
+  /** Extra JSON-LD nodes (Service, FAQPage, BreadcrumbList, BlogPosting…). */
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+}
+
+const {
+  title,
+  description,
+  image = site.ogImage,
+  imageAlt = `${site.name} — ${site.tagline}`,
+  ogType = 'website',
+  pageType,
+  schema = [],
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const canonical = absoluteUrl(Astro.url.pathname);
+const ogImage = absoluteUrl(image);
+const jsonLd = graph([
+  organizationNode(),
+  websiteNode(),
+  webPageNode({ path: Astro.url.pathname, title, description, type: pageType, image }),
+  ...schema,
+]);
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+
+    <link rel="preload" href={spaceGroteskWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSansWoff2} as="font" type="font/woff2" crossorigin />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
+    <!-- Icons & app -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content={site.themeColor} />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <a href="#main" class="to-top" aria-label="Back to top" data-to-top>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path>
+      </svg>
+    </a>
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .scroll-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-progress);
+    height: 3px;
+    background: var(--grad-brand);
+    transform-origin: 0 50%;
+    transform: scaleX(var(--progress, 0));
+    pointer-events: none;
+  }
+
+  .to-top {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: var(--z-float);
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(11, 16, 48, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px -10px rgba(7, 10, 31, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 16px;
+    transition:
+      opacity var(--dur) ease,
+      translate var(--dur) var(--ease-out),
+      visibility var(--dur),
+      background-color var(--dur) ease;
+  }
+
+  .to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .to-top:hover {
+      background: var(--violet-600);
+    }
+  }
+</style>

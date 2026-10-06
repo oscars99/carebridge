@@ -1,0 +1,88 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../config/site';
+---
+
+<LegalLayout
+  title="Terms of Service | Digital AI Force"
+  description="The terms that apply when you use digitalaiforce.com, the Digital AI Force website."
+  heading="Terms of Service"
+  path="/terms/"
+  updated="October 6, 2026"
+>
+  <p>
+    These Terms of Service (“Terms”) govern your use of <a href="/">digitalaiforce.com</a> (the “Site”),
+    operated by {site.legalName} (“we”, “us” or “our”). By using the Site, you agree to these Terms. If you don’t agree, please don’t
+    use the Site.
+  </p>
+
+  <h2>Using the Site</h2>
+  <p>
+    You may use the Site for lawful purposes only. You agree not to misuse the Site — for example by attempting to gain unauthorized
+    access, interfering with its operation, submitting spam or malicious content, or scraping it in a way that burdens our systems.
+  </p>
+
+  <h2>Information on the Site</h2>
+  <p>
+    Content on the Site, including blog articles, is provided for general information and does not constitute professional, legal or
+    financial advice. Prices shown are starting points for typical projects; the price for your project is set only in a written
+    quote or agreement.
+  </p>
+
+  <h2>Inquiries, quotes and services</h2>
+  <p>
+    Submitting a form or contacting us does not create a client relationship. Our services are provided under a separate written
+    proposal or agreement that describes the scope, timeline, fees and ownership of deliverables. If anything in that agreement
+    conflicts with these Terms, the agreement governs.
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    The Site and its content — including text, graphics, logos and code — are owned by {site.legalName} or our licensors and are
+    protected by intellectual property laws. You may not copy, modify or redistribute Site content without our written permission.
+    Ownership of work we create for clients is set out in each project agreement; our standard practice is that clients own their
+    final deliverables once paid in full.
+  </p>
+
+  <h2>Third-party links and tools</h2>
+  <p>
+    The Site may link to third-party websites or reference third-party platforms. We aren’t responsible for their content, policies
+    or availability.
+  </p>
+
+  <h2>No guarantee of results</h2>
+  <p>
+    We work hard to deliver great outcomes, but search rankings, advertising performance, traffic and sales depend on many factors
+    outside our control (including search engines, ad platforms and market conditions). We therefore can’t guarantee specific
+    results.
+  </p>
+
+  <h2>Disclaimer</h2>
+  <p>
+    The Site is provided “as is” and “as available”, without warranties of any kind, express or implied, to the fullest extent
+    permitted by law.
+  </p>
+
+  <h2>Limitation of liability</h2>
+  <p>
+    To the fullest extent permitted by law, {site.legalName} will not be liable for any indirect, incidental, special, consequential
+    or punitive damages, or any loss of profits or revenue, arising from your use of the Site.
+  </p>
+
+  <h2>Changes to these Terms</h2>
+  <p>
+    We may update these Terms from time to time. The “Last updated” date above shows when they last changed. Continued use of the
+    Site after changes means you accept the updated Terms.
+  </p>
+
+  <h2>Governing law</h2>
+  <p>
+    These Terms are governed by the laws of the jurisdiction in which {site.legalName} is established, without regard to its
+    conflict-of-law rules.
+  </p>
+
+  <h2>Contact us</h2>
+  <p>
+    Questions about these Terms? Email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</LegalLayout>
