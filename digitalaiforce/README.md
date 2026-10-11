@@ -74,7 +74,7 @@ These are reasonable defaults written as placeholders. Review each so the site m
 
 - [ ] Prices in `src/data/pricing.ts`
 - [ ] Promises shown as stats in `src/data/home.ts` (90+ PageSpeed, 24h replies, 100% ownership, 30 days support) and the "no long-term contracts" / "you own everything" commitments used across the site
-- [ ] `hello@digitalaiforce.com` exists and is monitored (or change `site.email`)
+- [ ] `support@digitalaiforce.com` exists and is monitored (or change `site.email`)
 - [ ] Contact form backend connected (see above)
 - [ ] Privacy policy and terms reviewed (ideally by a legal professional)
 - [ ] Add real client testimonials, logos or case studies once you have them — none were invented for this site

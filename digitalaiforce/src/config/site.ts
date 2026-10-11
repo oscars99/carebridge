@@ -37,7 +37,7 @@ export const site: SiteConfig = {
     'Digital AI Force builds fast websites, mobile apps, SEO and marketing campaigns that bring small businesses more customers. AI-powered, human-led.',
 
   /** Main inbox. Used for mailto links and as the form fallback. */
-  email: 'hello@digitalaiforce.com',
+  email: 'support@digitalaiforce.com',
   /** Optional, e.g. '+1 (555) 010-2030'. Leave empty to hide. */
   phone: '',
   /** Optional city/region you serve from, e.g. 'Miami, FL'. Shown in the footer and schema. */
