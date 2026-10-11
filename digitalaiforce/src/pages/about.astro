@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import CTABand from '../components/CTABand.astro';
 import Icon from '../components/Icon.astro';
 import { breadcrumbNode } from '../lib/schema';
+import { site } from '../config/site';
 
 const path = '/about/';
 const crumbs = [
@@ -199,10 +200,43 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
     </div>
   </section>
 
+  {
+    site.parentCompany && (
+      <section class="section section--tight" aria-labelledby="company-title">
+        <div class="container container--narrow">
+          <div class="company card" data-reveal>
+            <span class="icon-badge">
+              <Icon name="building" />
+            </span>
+            <div>
+              <h2 id="company-title">A {site.parentCompany} company</h2>
+              <p>
+                {site.name} is owned and operated by <strong>{site.parentCompany}</strong>, the team behind our websites, apps and AI
+                automation work.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <CTABand title="Let’s build something" accent="great together" />
 </BaseLayout>
 
 <style>
+  .company {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: clamp(24px, 3vw, 36px);
+  }
+
+  .company h2 {
+    margin-bottom: 8px;
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  }
+
   .about-copy {
     display: grid;
     gap: 1.1rem;

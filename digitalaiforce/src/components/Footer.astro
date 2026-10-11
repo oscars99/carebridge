@@ -119,7 +119,10 @@ const legal = [
     <div class="site-footer__wordmark" aria-hidden="true">Digital AI Force</div>
 
     <div class="site-footer__bottom">
-      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p>
+        © {year} {site.legalName}. All rights reserved.
+        {site.parentCompany && <>{' '}A {site.parentCompany} company.</>}
+      </p>
       <p>Websites · SEO · Marketing · Apps · AI</p>
     </div>
   </div>

@@ -8,6 +8,8 @@
 export interface SiteConfig {
   name: string;
   legalName: string;
+  /** Company that owns/operates the brand. Empty hides it. */
+  parentCompany: string;
   url: string;
   tagline: string;
   description: string;
@@ -28,6 +30,7 @@ export interface SiteConfig {
 export const site: SiteConfig = {
   name: 'Digital AI Force',
   legalName: 'Digital AI Force',
+  parentCompany: 'Tap Mobile AI LLC',
   url: 'https://digitalaiforce.com',
   tagline: 'AI-powered digital growth for small businesses',
   description:
