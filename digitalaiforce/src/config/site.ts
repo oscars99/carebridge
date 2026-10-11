@@ -30,7 +30,7 @@ export interface SiteConfig {
 export const site: SiteConfig = {
   name: 'Digital AI Force',
   legalName: 'Digital AI Force',
-  parentCompany: 'Tap Mobile AI LLC',
+  parentCompany: 'Tap Mobile AI, LLC',
   url: 'https://digitalaiforce.com',
   tagline: 'AI-powered digital growth for small businesses',
   description:
