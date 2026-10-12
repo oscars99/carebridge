@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://digitalaiforce.com/sitemap-index.xml
