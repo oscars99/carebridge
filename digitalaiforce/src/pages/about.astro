@@ -84,7 +84,7 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
     <div class="container split split--top">
       <div data-reveal>
         <p class="eyebrow">Our mission</p>
-        <h2 id="mission-title">Make modern digital growth <span class="text-gradient">simple, affordable and accountable</span></h2>
+        <h2 id="mission-title" data-split>Make modern digital growth <span class="text-gradient">simple, affordable and accountable</span></h2>
       </div>
       <div class="about-copy" data-reveal style="--i: 1">
         <p>
@@ -106,41 +106,42 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
 
   <section class="section theme-white" aria-labelledby="values-title">
     <div class="container">
-      <div class="section-head section-head--center" data-reveal>
+      <div class="section-head" data-reveal>
         <p class="eyebrow">What we believe</p>
-        <h2 id="values-title">Values that guide <span class="text-gradient">every project</span></h2>
+        <h2 id="values-title" data-split>Values that guide <span class="text-gradient">every project</span></h2>
       </div>
-      <div class="grid grid-4">
+      <ul class="ruled-grid" role="list">
         {
           values.map((v, i) => (
-            <article class="card spotlight lift value" data-reveal style={`--i: ${i}`}>
-              <span class="icon-badge">
+            <li data-reveal style={`--i: ${i}`}>
+              <div class="ruled__top">
+                <span class="ruled__num">{String(i + 1).padStart(2, '0')}</span>
                 <Icon name={v.icon} />
-              </span>
+              </div>
               <h3>{v.title}</h3>
               <p>{v.text}</p>
-            </article>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </section>
 
   <section class="section theme-dark ai-human" aria-labelledby="ai-human-title">
-    <div class="bg-grid" aria-hidden="true"></div>
     <div class="container">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">AI-powered, human-led</p>
-        <h2 id="ai-human-title">How we use AI — <span class="text-gradient">responsibly</span></h2>
+        <h2 id="ai-human-title" data-split>How we use AI — <span class="text-gradient">responsibly</span></h2>
         <p class="lead">AI is a tool, not a replacement for judgment. Here’s exactly how it fits into our work.</p>
       </div>
       <div class="grid grid-3">
         {
           aiSplit.map((col, i) => (
-            <article class="card lift ai-col" data-reveal style={`--i: ${i}`}>
-              <span class="icon-badge">
+            <article class="card ai-col" data-reveal style={`--i: ${i}`}>
+              <div class="ai-col__top">
+                <span class="ai-col__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <Icon name={col.icon} />
-              </span>
+              </div>
               <h3>{col.title}</h3>
               <ul class="check-list" role="list">
                 {col.points.map((p) => (
@@ -158,7 +159,7 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
     <div class="container container--narrow">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">Why small businesses choose us</p>
-        <h2 id="compare-title">The best of an agency, <span class="text-gradient">without the baggage</span></h2>
+        <h2 id="compare-title" data-split>The best of an agency, <span class="text-gradient">without the baggage</span></h2>
       </div>
       <div class="compare" data-reveal="scale" role="region" aria-label="Comparison table" tabindex="0">
         <table>
@@ -204,9 +205,9 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
     site.parentCompany && (
       <section class="section section--tight" aria-labelledby="company-title">
         <div class="container container--narrow">
-          <div class="company card" data-reveal>
-            <span class="icon-badge">
-              <Icon name="building" />
+          <div class="company" data-reveal>
+            <span class="company__mark" aria-hidden="true">
+              <Icon name="building" size={26} strokeWidth={1.5} />
             </span>
             <div>
               <h2 id="company-title">A {site.parentCompany} company</h2>
@@ -227,58 +228,87 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
 <style>
   .company {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     align-items: flex-start;
-    padding: clamp(24px, 3vw, 36px);
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: var(--radius-xl);
+    background: var(--ember);
+    color: var(--ink);
+  }
+
+  .company__mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
   }
 
   .company h2 {
-    margin-bottom: 8px;
-    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    margin-bottom: 10px;
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    color: var(--ink);
+  }
+
+  .company p {
+    color: rgba(20, 19, 17, 0.85);
+    max-width: 60ch;
   }
 
   .about-copy {
     display: grid;
-    gap: 1.1rem;
-    font-size: 1.1rem;
+    gap: 1.2rem;
+    font-size: 1.12rem;
     color: var(--text-muted);
   }
 
-  .value,
+  .about-copy p:first-child {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
   .ai-col {
     display: flex;
     flex-direction: column;
     gap: 14px;
   }
 
-  .value h3,
+  .ai-col__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .ai-col__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ember);
+  }
+
   .ai-col h3 {
-    margin: 4px 0 0;
-  }
-
-  .ai-human {
-    overflow: hidden;
-  }
-
-  .ai-human .container {
-    position: relative;
-  }
-
-  .ai-col .check-list {
-    margin-top: 6px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 2.4vw, 2.1rem);
+    line-height: 1.02;
+    margin: 0 0 6px;
   }
 
   .ai-col .check-list li {
-    color: var(--on-night);
+    color: var(--on-dark);
   }
 
   /* ---------- Comparison table ---------- */
   .compare {
     overflow-x: auto;
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     background: var(--surface);
     border: 1px solid var(--line);
-    box-shadow: var(--shadow);
   }
 
   .compare table {
@@ -301,9 +331,11 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
 
   .compare thead th {
     font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.1;
     color: var(--ink);
+    border-bottom-color: var(--ink);
   }
 
   .compare tbody th {
@@ -313,11 +345,12 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
   }
 
   .compare .compare__us {
-    background: rgba(124, 92, 255, 0.07);
+    background: rgba(255, 106, 61, 0.1);
   }
 
   .compare thead .compare__us {
-    color: var(--violet-600);
+    font-style: italic;
+    color: var(--ember-ink);
   }
 
   .compare__yes,
@@ -330,13 +363,13 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
   }
 
   .compare__yes {
-    color: #fff;
-    background: var(--grad-cta);
+    color: var(--paper);
+    background: var(--ink);
   }
 
   .compare__no {
-    color: #9aa1bd;
-    background: var(--paper);
+    color: var(--ink-2);
+    border: 1px solid var(--line-strong);
   }
 
   .compare__varies {
@@ -345,9 +378,8 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
     border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--ink-muted);
-    background: var(--paper);
-    border: 1px solid var(--line);
+    color: var(--ink-2);
+    border: 1px solid var(--line-strong);
   }
 
   .compare tbody tr {
@@ -356,7 +388,7 @@ const compare: { label: string; us: Mark; agency: Mark; diy: Mark }[] = [
 
   @media (hover: hover) and (pointer: fine) {
     .compare tbody tr:hover {
-      background: rgba(124, 92, 255, 0.03);
+      background: rgba(20, 19, 17, 0.03);
     }
   }
 </style>

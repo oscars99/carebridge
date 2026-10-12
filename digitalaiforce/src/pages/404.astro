@@ -9,15 +9,11 @@ import { services, serviceUrl } from '../data/services';
   description="Sorry, we couldn’t find that page. Explore our services or head back home."
   noindex
 >
-  <section class="nf theme-dark" aria-labelledby="nf-title">
-    <div class="nf__bg" aria-hidden="true">
-      <div class="bg-grid"></div>
-      <div class="orb orb--violet nf__orb nf__orb--1"></div>
-      <div class="orb orb--cyan nf__orb nf__orb--2"></div>
-    </div>
+  <section class="nf" aria-labelledby="nf-title">
+    <div class="bg-grid nf__grid" aria-hidden="true"></div>
     <div class="container nf__inner">
-      <p class="nf__code enter" aria-hidden="true">404</p>
-      <h1 id="nf-title" class="enter" style="--d: 1">This page took a <span class="text-gradient">wrong turn</span></h1>
+      <p class="nf__code enter" aria-hidden="true">4<em>0</em>4</p>
+      <h1 id="nf-title" data-split>This page took a <span class="text-gradient">wrong turn</span></h1>
       <p class="lead enter" style="--d: 2">
         The page you’re looking for may have moved or no longer exists. Let’s get you back on track.
       </p>
@@ -63,81 +59,58 @@ import { services, serviceUrl } from '../data/services';
     text-align: center;
   }
 
-  .nf__bg {
-    position: absolute;
-    inset: 0;
+  .nf__grid {
     z-index: -1;
   }
 
-  .nf__orb--1 {
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    left: 10%;
-    animation: drift 20s var(--ease-in-out) infinite;
-  }
-
-  .nf__orb--2 {
-    width: 480px;
-    height: 480px;
-    bottom: -200px;
-    right: 5%;
-    opacity: 0.35;
-    animation: drift 24s var(--ease-in-out) infinite reverse;
-  }
-
   .nf__inner {
-    max-width: 860px;
+    max-width: 960px;
   }
 
   .nf__code {
     font-family: var(--font-display);
-    font-size: clamp(6rem, 22vw, 13rem);
-    font-weight: 700;
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-    background: var(--grad-text-on-dark);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation:
-      enter-up 1s var(--ease-out) both,
-      gradient-pan 6s var(--ease-in-out) infinite alternate;
+    font-size: clamp(8rem, 30vw, 20rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+  }
+
+  .nf__code em {
+    color: var(--ember-ink);
   }
 
   .nf h1 {
-    margin-top: 12px;
+    margin-top: 24px;
+    font-size: clamp(2.4rem, 5.4vw, 4.6rem);
   }
 
   .nf .lead {
-    margin: 18px auto 0;
+    margin: 22px auto 0;
   }
 
   .nf__actions {
     justify-content: center;
-    margin-top: 32px;
+    margin-top: 36px;
   }
 
   .nf__links {
-    margin-top: 48px;
+    margin-top: 56px;
   }
 
   .nf__links p {
     margin-bottom: 14px;
-    font-family: var(--font-display);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--on-night-muted);
+    color: var(--ink-2);
   }
 
   .nf__links ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     margin: 0;
     padding: 0;
   }
@@ -150,22 +123,19 @@ import { services, serviceUrl } from '../data/services';
     padding: 8px 16px;
     border-radius: 999px;
     font-size: 0.94rem;
-    color: var(--on-night);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
     transition:
+      color var(--dur) ease,
       border-color var(--dur) ease,
       background-color var(--dur) ease;
   }
 
-  .nf__links a :global(.icon) {
-    color: var(--violet-300);
-  }
-
   @media (hover: hover) and (pointer: fine) {
     .nf__links a:hover {
-      border-color: rgba(196, 181, 253, 0.55);
-      background: rgba(255, 255, 255, 0.09);
+      color: var(--paper);
+      background: var(--ink);
+      border-color: var(--ink);
     }
   }
 </style>

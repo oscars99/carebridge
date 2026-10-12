@@ -65,7 +65,7 @@ const faqs = [
               nextSteps.map((step, i) => (
                 <li>
                   <span class="next__num" aria-hidden="true">
-                    {i + 1}
+                    {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3>{step.title}</h3>
@@ -111,7 +111,7 @@ const faqs = [
     <div class="container container--narrow">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">Before you reach out</p>
-        <h2 id="contact-faq-title">Quick <span class="text-gradient">answers</span></h2>
+        <h2 id="contact-faq-title" data-split>Quick <span class="text-gradient">answers</span></h2>
       </div>
       <FAQ faqs={faqs} />
     </div>
@@ -120,7 +120,7 @@ const faqs = [
 
 <style>
   .contact-page {
-    padding-top: clamp(48px, 6vw, 80px);
+    padding-top: clamp(56px, 7vw, 96px);
   }
 
   .contact-page__grid {
@@ -132,7 +132,7 @@ const faqs = [
   @media (min-width: 1024px) {
     .contact-page__grid {
       grid-template-columns: 1.5fr 1fr;
-      gap: 32px;
+      gap: 40px;
     }
 
     .contact-page__aside {
@@ -142,22 +142,21 @@ const faqs = [
   }
 
   .contact-page__form {
-    padding: clamp(24px, 4vw, 44px);
+    padding: clamp(24px, 4vw, 52px);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow);
   }
 
   .contact-page__title {
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
   }
 
   .contact-page__sub {
-    margin: 8px 0 26px;
+    margin: 12px 0 34px;
     font-size: 0.95rem;
   }
 
   .contact-page__sub span[aria-hidden] {
-    color: var(--violet-500);
+    color: var(--ember-ink);
   }
 
   .contact-page__aside {
@@ -167,20 +166,27 @@ const faqs = [
 
   .next__title {
     margin-bottom: 18px;
-    font-size: 1.3rem;
+    font-size: 2rem;
   }
 
   .next__list {
     display: grid;
-    gap: 18px;
     margin: 0;
     padding: 0;
+    border-top: 1px solid var(--line);
   }
 
   .next__list li {
     display: flex;
     gap: 14px;
-    align-items: flex-start;
+    align-items: baseline;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .next__list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
   }
 
   .next__list h3 {
@@ -193,25 +199,18 @@ const faqs = [
   }
 
   .next__num {
-    display: grid;
-    place-items: center;
     flex: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 11px;
     font-family: var(--font-display);
-    font-weight: 700;
-    color: #fff;
-    background: var(--grad-cta);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ember-ink);
   }
 
   .contact-page .direct {
     display: grid;
-    gap: 12px;
-    background:
-      radial-gradient(100% 120% at 100% 0%, rgba(124, 92, 255, 0.45), transparent 60%),
-      var(--night-900);
-    border-color: transparent;
+    gap: 14px;
+    background: var(--ink);
+    border-color: var(--ink);
   }
 
   .direct .next__title {
@@ -222,17 +221,20 @@ const faqs = [
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: var(--on-dark);
     overflow-wrap: anywhere;
+  }
+
+  .direct a.direct__link:hover {
+    color: var(--ember);
   }
 
   .direct__link :global(.icon),
   .direct__note :global(.icon) {
     flex: none;
-    color: var(--violet-300);
+    color: var(--ember);
   }
 
   .direct__note {

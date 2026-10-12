@@ -1,4 +1,4 @@
-import { prefersReducedMotion, hasFinePointer } from './motion';
+import { prefersReducedMotion } from './motion';
 
 /** Hero word rotator: cycles .rotator__word elements. */
 export function initRotator() {
@@ -32,62 +32,6 @@ export function initRotator() {
     const io = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()));
     io.observe(rotator);
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  });
-}
-
-/** Cursor-following glow on .spotlight cards. */
-export function initSpotlight() {
-  if (!hasFinePointer()) return;
-  document.addEventListener(
-    'pointermove',
-    (e) => {
-      const card = (e.target as Element | null)?.closest?.<HTMLElement>('.spotlight');
-      if (!card) return;
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      card.style.setProperty('--my', `${e.clientY - r.top}px`);
-    },
-    { passive: true },
-  );
-}
-
-/** Subtle 3D tilt + parallax layers for the hero visual. */
-export function initTilt() {
-  if (!hasFinePointer() || prefersReducedMotion()) return;
-
-  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
-    const zone = el.closest('section') ?? el;
-    const layers = Array.from(el.querySelectorAll<HTMLElement>('[data-parallax]'));
-    let frame = 0;
-
-    zone.addEventListener(
-      'pointermove',
-      (e) => {
-        const event = e as PointerEvent;
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          const r = el.getBoundingClientRect();
-          const x = (event.clientX - (r.left + r.width / 2)) / r.width; // -0.5…0.5-ish
-          const y = (event.clientY - (r.top + r.height / 2)) / r.height;
-          const cx = Math.max(-1, Math.min(1, x));
-          const cy = Math.max(-1, Math.min(1, y));
-          el.style.setProperty('--ry', `${(cx * 6).toFixed(2)}deg`);
-          el.style.setProperty('--rx', `${(-cy * 6).toFixed(2)}deg`);
-          for (const layer of layers) {
-            const depth = Number(layer.dataset.parallax) || 0;
-            layer.style.translate = `${(cx * depth).toFixed(1)}px ${(cy * depth).toFixed(1)}px`;
-          }
-        });
-      },
-      { passive: true },
-    );
-
-    zone.addEventListener('pointerleave', () => {
-      cancelAnimationFrame(frame);
-      el.style.setProperty('--rx', '0deg');
-      el.style.setProperty('--ry', '0deg');
-      for (const layer of layers) layer.style.translate = '';
-    });
   });
 }
 

@@ -6,11 +6,14 @@ import { industries } from '../../data/home';
 <ul class="industries" role="list">
   {
     industries.map((ind, i) => (
-      <li class="industries__item lift" data-reveal style={`--i: ${i % 4}`}>
-        <span class="industries__icon">
-          <Icon name={ind.icon} size={22} />
+      <li class="industries__item" data-reveal style={`--i: ${i % 3}`}>
+        <span class="industries__num" aria-hidden="true">
+          {String(i + 1).padStart(2, '0')}
         </span>
-        <span>{ind.name}</span>
+        <span class="industries__name">{ind.name}</span>
+        <span class="industries__icon" aria-hidden="true">
+          <Icon name={ind.icon} size={22} strokeWidth={1.5} />
+        </span>
       </li>
     ))
   }
@@ -19,72 +22,74 @@ import { industries } from '../../data/home';
 <style>
   .industries {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
+    border-top: 1px solid var(--line-strong);
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 760px) {
     .industries {
-      grid-template-columns: repeat(auto-fill, minmax(262px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(32px, 5vw, 80px);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .industries {
+      grid-template-columns: 1fr 1fr 1fr;
     }
   }
 
   .industries__item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    font-family: var(--font-display);
+    gap: 16px;
+    padding-block: 20px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .industries__num {
+    flex: none;
+    width: 2ch;
+    font-size: 0.8rem;
     font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-    color: var(--heading);
-    background: var(--card);
-    border: 1px solid var(--border);
+    color: var(--ink-2);
+  }
+
+  .industries__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 2.3vw, 2rem);
+    line-height: 1.05;
     transition:
-      transform var(--dur) var(--ease-out),
-      box-shadow var(--dur) var(--ease-out),
-      border-color var(--dur) ease;
+      color var(--dur) ease,
+      translate 0.5s var(--ease-out);
   }
 
   .industries__icon {
     display: grid;
     place-items: center;
+    margin-left: auto;
     flex: none;
     width: 44px;
     height: 44px;
-    border-radius: 13px;
-    color: var(--violet-600);
-    background: var(--badge-bg);
-    border: 1px solid var(--badge-border);
+    border-radius: 50%;
+    color: var(--ink);
     transition:
-      transform var(--dur) var(--ease-spring),
-      color var(--dur) ease,
-      background var(--dur) ease;
-  }
-
-  @media (max-width: 639px) {
-    .industries__item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.92rem;
-    }
+      background-color var(--dur) ease,
+      transform 0.5s var(--ease-spring);
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .industries__item:hover {
-      border-color: rgba(124, 92, 255, 0.4);
+    .industries__item:hover .industries__name {
+      color: var(--ember-ink);
+      font-style: italic;
+      translate: 8px 0;
     }
 
     .industries__item:hover .industries__icon {
-      color: #fff;
-      background: var(--grad-cta);
-      transform: rotate(-8deg) scale(1.06);
+      background: var(--ember);
+      transform: rotate(-8deg) scale(1.05);
     }
   }
 </style>

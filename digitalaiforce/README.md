@@ -7,7 +7,7 @@ Built with [Astro](https://astro.build) as a fully static, SEO-first site: every
 | Lighthouse (local build, mobile) | Performance | Accessibility | Best practices | SEO |
 | --- | --- | --- | --- | --- |
 | Home | 99 | 100 | 100 | 100 |
-| Service, blog, about & contact pages | 100 | 100 | 100 | 100 |
+| Service & blog pages | 100 | 100 | 100 | 100 |
 
 ## Quick start
 
@@ -24,11 +24,17 @@ npm run check     # type-check .astro/.ts files
 
 ## What's included
 
-- **Home page** with animated hero, service bento grid, AI chat demo, scroll-driven process timeline, animated stats, industries, pricing tabs, FAQ and contact form
+- **Home page** with a kinetic-type hero, numbered service index, AI chat demo, scroll-lit statement, sticky stacking process cards, animated stats, industries, pricing tabs, FAQ and contact form
 - **8 service pages** (`/services/<slug>/`), each targeting its own keywords, plus a services hub with an interactive "what's your goal?" service finder
 - **Pricing**, **About**, **Contact**, **Blog** (3 starter articles), **Privacy**, **Terms** and a custom **404**
 - **SEO:** unique titles and descriptions, canonical URLs, Open Graph/Twitter cards, JSON-LD structured data (Organization, WebSite, Service, FAQPage, BreadcrumbList, BlogPosting), XML sitemap, `robots.txt`, web manifest and icons
 - **Accessibility:** semantic landmarks, skip link, keyboard-friendly menus and tabs, visible focus states, `prefers-reduced-motion` support
+
+## Design system — “Ink & Ember”
+
+Warm paper (`#f2eee6`), ink type (`#141311`) and a single ember accent (`#ff6a3d`; `#b83a17` when used as text on paper). Headlines are set in **Instrument Serif** with italic accents; UI and body copy use **Inter Tight**. All tokens live at the top of `src/styles/global.css`.
+
+Motion is scroll-led and progressive: Lenis smooth scrolling (mouse/trackpad only), word-by-word heading reveals (`data-split`), scroll-lit text (`data-lit`), parallax (`data-speed`), a marquee that leans with scroll speed, and cross-page View Transitions. Headings stay real text in the HTML, and everything switches off for visitors who prefer reduced motion.
 
 ## Editing content
 
@@ -86,7 +92,7 @@ These are reasonable defaults written as placeholders. Review each so the site m
 ```bash
 npx playwright install chromium
 npm i -D playwright
-npm run assets
+npm run assets      # artwork templates live in scripts/brand-assets.mjs
 cd public && convert favicon-16.png favicon-32.png favicon-48.png favicon.ico && rm favicon-16.png favicon-32.png favicon-48.png   # ImageMagick
 ```
 
@@ -98,7 +104,7 @@ digitalaiforce/
 ├── scripts/brand-assets.mjs
 ├── supabase/leads.sql      # optional form backend
 ├── src/
-│   ├── components/         # Header, Footer, ServicesBento, PricingPlans, FAQ, ContactForm…
+│   ├── components/         # Header, Footer, ServicesIndex, ProcessSteps, PricingPlans, FAQ, ContactForm…
 │   │   └── home/           # home-only sections (hero, AI showcase, promises, industries)
 │   ├── config/site.ts      # business details & form settings
 │   ├── content/blog/       # Markdown articles

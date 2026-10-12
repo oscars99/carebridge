@@ -68,12 +68,14 @@ const blogNode = {
 <style>
   .posts {
     display: grid;
-    gap: 24px;
+    gap: clamp(40px, 5vw, 64px) clamp(24px, 3vw, 40px);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   }
 
   .posts--featured {
     grid-template-columns: 1fr;
-    margin-bottom: 24px;
+    margin-bottom: clamp(56px, 7vw, 96px);
+    padding-bottom: clamp(56px, 7vw, 96px);
+    border-bottom: 1px solid var(--line);
   }
 </style>

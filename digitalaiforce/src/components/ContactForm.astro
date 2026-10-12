@@ -70,7 +70,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
             <label class="choice">
               <input type="checkbox" name="services" value={s.navLabel} data-service-slug={s.slug} />
               <span>
-                <Icon name={s.icon} size={16} strokeWidth={2} />
+                <Icon name="check" size={15} strokeWidth={2.4} />
                 {s.navLabel}
               </span>
             </label>
@@ -138,54 +138,60 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
 
 <style>
   .cform {
+    --field-line: rgba(20, 19, 17, 0.55);
+    --field-focus: var(--ink);
+    --field-danger: var(--danger);
     position: relative;
   }
 
   .cform__form {
     display: grid;
-    gap: 18px;
+    gap: 26px;
   }
 
   .cform__row {
     display: grid;
-    gap: 18px;
+    gap: 26px;
   }
 
   @media (min-width: 640px) {
     .cform__row {
       grid-template-columns: 1fr 1fr;
+      gap: 32px;
     }
   }
 
   .field {
     display: grid;
-    gap: 8px;
+    gap: 4px;
     min-width: 0;
     margin: 0;
     padding: 0;
     border: 0;
   }
 
-  .field label,
-  .field legend {
-    font-family: var(--font-display);
-    font-size: 0.94rem;
+  .field > label,
+  .field > legend {
+    font-size: 0.76rem;
     font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--heading);
   }
 
   .field legend {
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     padding: 0;
   }
 
-  .field label span[aria-hidden] {
-    color: var(--violet-500);
+  .field > label span[aria-hidden] {
+    color: var(--accent);
   }
 
   .field__optional {
-    font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
     color: var(--text-muted);
   }
 
@@ -194,48 +200,49 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
   .field textarea {
     width: 100%;
     min-height: 52px;
-    padding: 13px 16px;
-    border-radius: 14px;
-    font-size: 1rem;
+    padding: 12px 0;
+    border-radius: 0;
+    font-size: 1.12rem;
     color: var(--heading);
-    background: var(--field-bg, var(--surface));
-    border: 1px solid var(--field-border, var(--line));
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--field-line);
     transition:
       border-color var(--dur-fast) ease,
-      box-shadow var(--dur-fast) ease,
-      background-color var(--dur-fast) ease;
+      box-shadow var(--dur) var(--ease-out);
     appearance: none;
   }
 
   .field textarea {
-    min-height: 140px;
+    min-height: 130px;
     resize: vertical;
     line-height: 1.55;
   }
 
   .field ::placeholder {
     color: var(--text-muted);
-    opacity: 0.75;
+    opacity: 0.8;
   }
 
   .field input:focus,
   .field select:focus,
   .field textarea:focus {
     outline: none;
-    border-color: var(--violet-500);
-    box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18);
+    border-bottom-color: var(--field-focus);
+    box-shadow: 0 1px 0 0 var(--field-focus);
   }
 
   .field [aria-invalid='true'] {
-    border-color: var(--field-danger, var(--danger));
-    box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.12);
+    border-bottom-color: var(--field-danger);
+    box-shadow: 0 1px 0 0 var(--field-danger);
   }
 
   .field__error {
     min-height: 0;
+    margin-top: 4px;
     font-size: 0.86rem;
     font-weight: 500;
-    color: var(--field-danger, var(--danger));
+    color: var(--field-danger);
   }
 
   .field__error:empty {
@@ -248,11 +255,16 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
 
   .select :global(.icon) {
     position: absolute;
-    right: 16px;
+    right: 0;
     top: 50%;
     translate: 0 -50%;
     color: var(--text-muted);
     pointer-events: none;
+  }
+
+  .select select {
+    padding-right: 28px;
+    cursor: pointer;
   }
 
   .cform__chips {
@@ -278,13 +290,12 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
     align-items: center;
     gap: 8px;
     min-height: 44px;
-    padding: 9px 14px;
+    padding: 9px 16px;
     border-radius: 999px;
     font-size: 0.92rem;
     font-weight: 500;
     color: var(--text);
-    background: var(--field-bg, var(--surface));
-    border: 1px solid var(--field-border, var(--line));
+    border: 1px solid var(--field-line);
     transition:
       background-color var(--dur-fast) ease,
       border-color var(--dur-fast) ease,
@@ -294,23 +305,21 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
   }
 
   .choice span :global(.icon) {
-    color: var(--violet-500);
-    transition: color var(--dur-fast) ease;
+    display: none;
   }
 
   .choice input:checked + span {
-    color: #fff;
-    background: var(--grad-cta);
-    border-color: transparent;
-    box-shadow: 0 8px 20px -10px rgba(91, 61, 245, 0.8);
+    color: var(--ink);
+    background: var(--ember);
+    border-color: var(--ember);
   }
 
   .choice input:checked + span :global(.icon) {
-    color: #fff;
+    display: block;
   }
 
   .choice input:focus-visible + span {
-    outline: 2px solid var(--violet-500);
+    outline: 2px solid var(--field-focus);
     outline-offset: 3px;
   }
 
@@ -320,7 +329,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
 
   @media (hover: hover) and (pointer: fine) {
     .choice:hover input:not(:checked) + span {
-      border-color: var(--violet-500);
+      border-color: var(--field-focus);
     }
   }
 
@@ -329,7 +338,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
     align-items: center;
     gap: 8px;
     padding: 10px 14px;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 0.92rem;
     color: var(--heading);
     background: var(--badge-bg);
@@ -349,7 +358,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
     flex-wrap: wrap;
     align-items: center;
     gap: 14px 20px;
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
   .cform__privacy {
@@ -362,6 +371,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
   }
 
   .cform__privacy a {
+    color: var(--heading);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -371,8 +381,8 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #fff;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
     animation: spin 0.8s linear infinite;
   }
 
@@ -394,7 +404,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
   }
 
   .cform__status.is-error {
-    color: var(--field-danger, var(--danger));
+    color: var(--field-danger);
   }
 
   /* ---------- Success ---------- */
@@ -414,6 +424,13 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
     outline: none;
   }
 
+  .cform__success h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 3.4vw, 2.8rem);
+    line-height: 1;
+  }
+
   .cform__success p {
     max-width: 46ch;
     color: var(--text-muted);
@@ -425,8 +442,8 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
   }
 
   .cform__check circle {
-    fill: rgba(74, 222, 128, 0.12);
-    stroke: var(--success-on-dark);
+    fill: var(--ember);
+    stroke: var(--ember);
     stroke-width: 2;
     stroke-dasharray: 160;
     stroke-dashoffset: 160;
@@ -435,7 +452,7 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
 
   .cform__check path {
     fill: none;
-    stroke: var(--success-on-dark);
+    stroke: var(--ink);
     stroke-width: 3.5;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -452,26 +469,17 @@ const budgets = ['Not sure yet', 'Under $2,000', '$2,000 â€“ $5,000', '$5,000 â€
 
   /* Dark-surface variant (used on the home page contact section) */
   :global(.theme-dark) .cform {
-    --field-bg: rgba(255, 255, 255, 0.04);
-    --field-border: rgba(255, 255, 255, 0.14);
-    --field-danger: var(--danger-on-dark);
-  }
-
-  :global(.theme-dark) .field input,
-  :global(.theme-dark) .field select,
-  :global(.theme-dark) .field textarea {
-    color: #fff;
+    --field-line: rgba(242, 238, 230, 0.5);
+    --field-focus: var(--on-dark);
+    --field-danger: #ff9b87;
   }
 
   :global(.theme-dark) .field select option {
     color: var(--ink);
-  }
-
-  :global(.theme-dark) .choice span :global(.icon) {
-    color: var(--violet-300);
+    background: var(--paper);
   }
 
   :global(.theme-dark) .cform__privacy a {
-    color: #fff;
+    color: var(--on-dark);
   }
 </style>

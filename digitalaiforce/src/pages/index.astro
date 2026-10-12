@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeHero from '../components/home/HomeHero.astro';
-import ServicesBento from '../components/ServicesBento.astro';
+import ServicesIndex from '../components/ServicesIndex.astro';
 import AIShowcase from '../components/home/AIShowcase.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import Promises from '../components/home/Promises.astro';
@@ -27,25 +27,40 @@ const description =
       <div class="section-head section-head--split">
         <div data-reveal>
           <p class="eyebrow">What we do</p>
-          <h2 id="services-title">Everything your business needs to <span class="text-gradient">win online</span></h2>
+          <h2 id="services-title" data-split>Everything your business needs to <span class="text-gradient">win online</span></h2>
         </div>
         <p class="lead" data-reveal style="--i: 1">
           One team for your website, search visibility, marketing, apps and automation — so nothing falls through the cracks between
           vendors.
         </p>
       </div>
-      <ServicesBento />
+      <ServicesIndex />
     </div>
   </section>
 
   <AIShowcase />
 
+  <section class="section statement" aria-label="Our approach">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Our approach</p>
+      <p class="statement__text" data-lit>
+        One team for your website, search, marketing, apps and automation. Experienced people do the thinking, AI helps us move faster —
+        and you get <em>agency-quality work</em> at a small-business pace and price.
+      </p>
+      <div class="statement__foot" data-reveal>
+        <a href="/about/" class="link-arrow">How we work <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+  </section>
+
   <section class="section theme-white" id="process" aria-labelledby="process-title">
     <div class="container">
-      <div class="section-head section-head--center" data-reveal>
-        <p class="eyebrow">How it works</p>
-        <h2 id="process-title">From first call to growth in <span class="text-gradient">four simple steps</span></h2>
-        <p class="lead">No jargon, no surprises. You’ll always know what’s happening, what it costs and what’s next.</p>
+      <div class="section-head section-head--split">
+        <div data-reveal>
+          <p class="eyebrow">How it works</p>
+          <h2 id="process-title" data-split>From first call to growth in <span class="text-gradient">four simple steps</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--i: 1">No jargon, no surprises. You’ll always know what’s happening, what it costs and what’s next.</p>
       </div>
       <ProcessSteps steps={processSteps} />
     </div>
@@ -58,7 +73,7 @@ const description =
       <div class="section-head section-head--split">
         <div data-reveal>
           <p class="eyebrow">Who we help</p>
-          <h2 id="industries-title">Built for local businesses <span class="text-gradient">&amp; growing brands</span></h2>
+          <h2 id="industries-title" data-split>Built for local businesses <span class="text-gradient">&amp; growing brands</span></h2>
         </div>
         <p class="lead" data-reveal style="--i: 1">
           From neighborhood favorites to ambitious startups, we tailor every website and campaign to how your customers actually search
@@ -73,7 +88,7 @@ const description =
     <div class="container">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">Simple pricing</p>
-        <h2 id="pricing-title">Transparent packages. <span class="text-gradient">No surprises.</span></h2>
+        <h2 id="pricing-title" data-split>Transparent packages. <span class="text-gradient">No surprises.</span></h2>
         <p class="lead">Fixed-price website projects and month-to-month growth plans. Every project starts with a free strategy call.</p>
       </div>
       <PricingPlans id="home-pricing" />
@@ -87,7 +102,7 @@ const description =
     <div class="container split split--40-60 split--top">
       <div class="section-head faq-intro" data-reveal>
         <p class="eyebrow">FAQ</p>
-        <h2 id="faq-title">Questions? <span class="text-gradient">We’ve got answers.</span></h2>
+        <h2 id="faq-title" data-split>Questions? <span class="text-gradient">We’ve got answers.</span></h2>
         <p class="lead">Everything small business owners usually ask before working with us. Still curious? Just ask.</p>
         <a href="/contact/" class="btn btn--primary mt-3">Ask us anything <Icon name="arrow-right" class="icon--move" /></a>
       </div>
@@ -96,12 +111,10 @@ const description =
   </section>
 
   <section class="section theme-dark home-contact" id="contact" aria-labelledby="contact-title">
-    <div class="bg-grid" aria-hidden="true"></div>
-    <div class="orb orb--violet home-contact__orb" aria-hidden="true"></div>
     <div class="container split split--40-60 split--top">
       <div class="home-contact__intro" data-reveal>
         <p class="eyebrow">Let’s talk</p>
-        <h2 id="contact-title">Get your free <span class="text-gradient">growth plan</span></h2>
+        <h2 id="contact-title" data-split>Get your free <span class="text-gradient">growth plan</span></h2>
         <p class="lead">
           Tell us where you are and where you want to be. We’ll reply {site.responseTime} with honest recommendations and a clear quote.
         </p>
@@ -120,6 +133,28 @@ const description =
 </BaseLayout>
 
 <style>
+  .statement__text {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 5.6vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .statement__text em {
+    color: var(--ember-ink);
+  }
+
+  .statement__text em :global(.lw) {
+    --lit-floor: 0.78;
+  }
+
+  .statement__foot {
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+
   .faq-intro {
     margin-bottom: 0;
   }
@@ -131,74 +166,61 @@ const description =
     }
   }
 
-  .home-contact {
-    overflow: hidden;
-  }
-
   .home-contact .container {
     position: relative;
   }
 
-  .home-contact__orb {
-    width: 600px;
-    height: 600px;
-    left: -200px;
-    bottom: -260px;
-    opacity: 0.4;
-    animation: drift 24s var(--ease-in-out) infinite;
-  }
-
   .home-contact__intro .lead {
-    margin-top: 1.1rem;
+    margin-top: 1.4rem;
   }
 
   .home-contact__steps {
     display: grid;
-    gap: 14px;
-    margin: 32px 0;
+    margin: 36px 0;
     padding: 0;
+    border-top: 1px solid var(--dark-line);
   }
 
   .home-contact__steps li {
     display: flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--on-night);
+    align-items: baseline;
+    gap: 16px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--dark-line);
+    color: var(--on-dark);
   }
 
   .home-contact__steps span {
-    display: grid;
-    place-items: center;
     flex: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
     font-family: var(--font-display);
-    font-weight: 700;
-    color: #fff;
-    background: rgba(124, 92, 255, 0.22);
-    border: 1px solid rgba(196, 181, 253, 0.3);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--ember);
   }
 
   .home-contact__email {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #fff;
-    border-bottom: 1px solid rgba(196, 181, 253, 0.4);
     padding-bottom: 4px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--on-dark);
+    border-bottom: 1px solid var(--dark-line);
+    transition:
+      color var(--dur) ease,
+      border-color var(--dur) ease;
+  }
+
+  .home-contact__email:hover {
+    color: var(--ember);
+    border-bottom-color: var(--ember);
   }
 
   .home-contact__card {
-    padding: clamp(22px, 3.5vw, 40px);
+    padding: clamp(24px, 4vw, 48px);
     border-radius: var(--radius-xl);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+    background: var(--dark-2);
+    border: 1px solid var(--dark-line);
   }
 </style>

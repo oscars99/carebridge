@@ -1,3 +1,5 @@
+import { getLenis } from './smooth';
+
 const root = document.documentElement;
 
 export function initHeader() {
@@ -98,6 +100,8 @@ export function initHeader() {
         if (el) el.inert = open;
       });
       document.body.style.overflow = open ? 'hidden' : '';
+      if (open) getLenis()?.stop();
+      else getLenis()?.start();
       if (open) root.classList.remove('header-hidden');
       if (!open && restoreFocus) menuToggle.focus();
     };

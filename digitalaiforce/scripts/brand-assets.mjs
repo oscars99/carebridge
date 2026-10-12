@@ -27,59 +27,61 @@ try {
 const fontData = async (pkg, file) =>
   `data:font/woff2;base64,${(await readFile(path.join(root, 'node_modules', pkg, 'files', file))).toString('base64')}`;
 const fonts = `
-  @font-face { font-family: 'Space Grotesk'; font-weight: 300 700; src: url('${await fontData('@fontsource-variable/space-grotesk', 'space-grotesk-latin-wght-normal.woff2')}') format('woff2'); }
-  @font-face { font-family: 'DM Sans'; font-weight: 100 1000; src: url('${await fontData('@fontsource-variable/dm-sans', 'dm-sans-latin-wght-normal.woff2')}') format('woff2'); }
+  @font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; src: url('${await fontData('@fontsource/instrument-serif', 'instrument-serif-latin-400-normal.woff2')}') format('woff2'); }
+  @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; src: url('${await fontData('@fontsource/instrument-serif', 'instrument-serif-latin-400-italic.woff2')}') format('woff2'); }
+  @font-face { font-family: 'Inter Tight'; font-weight: 100 900; src: url('${await fontData('@fontsource-variable/inter-tight', 'inter-tight-latin-wght-normal.woff2')}') format('woff2'); }
 `;
 
-/** The logo mark, kept in sync with src/components/Logo.astro. */
-const mark = (id, { rounded = true } = {}) => `
+const INK = '#141311';
+const PAPER = '#f2eee6';
+const EMBER = '#ff6a3d';
+
+/**
+ * The logo mark ("D" monogram + ember dot), kept in sync with src/components/Logo.astro.
+ * `scale` shrinks the glyph toward the centre (used for the maskable icon's safe zone).
+ */
+const mark = ({ rounded = true, scale = 1, tile = INK, glyph = PAPER } = {}) => `
 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="${id}" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#7c5cff"/><stop offset="0.55" stop-color="#3b82f6"/><stop offset="1" stop-color="#22d3ee"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="${rounded ? 9 : 0}" fill="url(#${id})"/>
-  <path d="M14.6 7.2c.7 5.3 3.3 7.9 8.6 8.6-5.3.7-7.9 3.3-8.6 8.6-.7-5.3-3.3-7.9-8.6-8.6 5.3-.7 7.9-3.3 8.6-8.6Z" fill="#fff"/>
-  <path d="M23.6 4.6c.25 1.85 1.15 2.75 3 3-1.85.25-2.75 1.15-3 3-.25-1.85-1.15-2.75-3-3 1.85-.25 2.75-1.15 3-3Z" fill="#fff" fill-opacity="0.85"/>
+  <rect width="32" height="32" rx="${rounded ? 8 : 0}" fill="${tile}"/>
+  <g transform="translate(16 16) scale(${scale}) translate(-16 -16)">
+    <path d="M10.5 8.5v15h4.25a7.5 7.5 0 0 0 0-15z" fill="none" stroke="${glyph}" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="24.75" cy="23.75" r="2.25" fill="${EMBER}"/>
+  </g>
 </svg>`;
 
-const iconPage = (size, { padding = 0, rounded = true, bg = 'transparent' } = {}) => `<!doctype html>
+const iconPage = (size, opts = {}) => `<!doctype html>
 <html><head><style>
-  html,body{margin:0;width:${size}px;height:${size}px;background:${bg};}
-  .wrap{width:${size}px;height:${size}px;display:grid;place-items:center;box-sizing:border-box;padding:${padding}px;}
-  svg{width:100%;height:100%;display:block}
-</style></head><body><div class="wrap">${mark('g' + size, { rounded })}</div></body></html>`;
+  html,body{margin:0;width:${size}px;height:${size}px;background:transparent;}
+  svg{width:${size}px;height:${size}px;display:block}
+</style></head><body>${mark(opts)}</body></html>`;
+
+const star =
+  'M10.6 1h2.8v7.6l5.4-5.4 2 2-5.4 5.4H23v2.8h-7.6l5.4 5.4-2 2-5.4-5.4V23h-2.8v-7.6l-5.4 5.4-2-2 5.4-5.4H1v-2.8h7.6L3.2 5.2l2-2 5.4 5.4z';
 
 const ogPage = `<!doctype html>
 <html><head><style>
   ${fonts}
   *{box-sizing:border-box;margin:0}
   html,body{width:1200px;height:630px}
-  body{font-family:'DM Sans',sans-serif;color:#f1f3ff;overflow:hidden;position:relative;
-    background:radial-gradient(60% 80% at 0% 0%, rgba(124,92,255,.55), transparent 60%),
-               radial-gradient(50% 70% at 100% 100%, rgba(34,211,238,.35), transparent 60%),
-               #070a1f}
-  .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(168,176,216,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(168,176,216,.08) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 40% 30%,#000 30%,transparent 80%)}
-  .content{position:relative;padding:68px 76px;height:100%;display:flex;flex-direction:column}
-  .brand{display:flex;align-items:center;gap:18px;font-family:'Space Grotesk';font-weight:700;font-size:38px;letter-spacing:-.03em}
-  .brand svg{width:64px;height:64px;border-radius:16px;box-shadow:0 14px 40px -10px rgba(91,61,245,.8)}
-  .ai{background:linear-gradient(100deg,#c4b5fd,#a78bfa 22%,#60a5fa 58%,#22d3ee);-webkit-background-clip:text;color:transparent}
-  h1{margin-top:56px;font-family:'Space Grotesk';font-weight:700;font-size:74px;line-height:1.02;letter-spacing:-.04em;max-width:900px}
-  h1 span{background:linear-gradient(100deg,#c4b5fd,#a78bfa 22%,#60a5fa 58%,#22d3ee);-webkit-background-clip:text;color:transparent}
-  .chips{display:flex;gap:12px;margin-top:auto}
-  .chip{padding:12px 22px;border-radius:999px;font-size:24px;font-weight:500;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16)}
-  .url{position:absolute;right:76px;top:80px;font-family:'Space Grotesk';font-size:26px;font-weight:600;color:#a8b0d8}
-  .spark{position:absolute;right:72px;bottom:64px;width:200px;height:200px;opacity:.9}
+  body{font-family:'Inter Tight',sans-serif;color:${INK};background:${PAPER};overflow:hidden;position:relative}
+  .lines{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(20,19,17,.08) 1px,transparent 1px);background-size:200px 100%;background-position:76px 0}
+  .content{position:relative;padding:64px 76px;height:100%;display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:16px;font-family:'Instrument Serif';font-size:44px;letter-spacing:-.01em}
+  .brand svg{width:54px;height:54px}
+  .brand em{color:#b83a17}
+  h1{margin-top:52px;font-family:'Instrument Serif';font-weight:400;font-size:104px;line-height:.9;letter-spacing:-.03em;max-width:980px}
+  h1 em{color:#b83a17}
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:22px;border-top:1px solid rgba(20,19,17,.3);font-size:24px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+  .foot span:last-child{letter-spacing:0;text-transform:none;font-weight:500}
+  .star{position:absolute;right:-70px;top:-70px;width:330px;height:330px;fill:${EMBER}}
 </style></head><body>
-  <div class="grid"></div>
-  <svg class="spark" viewBox="0 0 24 24"><defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path d="M12 2c.8 6.1 3.9 9.2 10 10-6.1.8-9.2 3.9-10 10-.8-6.1-3.9-9.2-10-10 6.1-.8 9.2-3.9 10-10Z" fill="url(#s)"/></svg>
+  <div class="lines"></div>
+  <svg class="star" viewBox="0 0 24 24"><path d="${star}"/></svg>
   <div class="content">
-    <div class="brand">${mark('og')}<span>Digital <span class="ai">AI</span> Force</span></div>
-    <h1>Websites, SEO &amp; marketing that <span>grow small businesses</span></h1>
-    <div class="chips"><span class="chip">Web design</span><span class="chip">SEO</span><span class="chip">Ads</span><span class="chip">Mobile apps</span><span class="chip">AI automation</span></div>
+    <div class="brand">${mark()}<span>Digital <em>AI</em> Force</span></div>
+    <h1>Websites, SEO &amp; marketing that <em>grow small businesses</em></h1>
+    <div class="foot"><span>Web · SEO · Ads · Apps · AI</span><span>digitalaiforce.com</span></div>
   </div>
-  <div class="url">digitalaiforce.com</div>
 </body></html>`;
 
 await mkdir(pub, { recursive: true });
@@ -98,11 +100,11 @@ for (const s of [16, 32, 48]) await shot(iconPage(s), `favicon-${s}.png`, { widt
 await shot(iconPage(180, { rounded: false }), 'apple-touch-icon.png', { width: 180, height: 180 }, { transparent: false });
 await shot(iconPage(192), 'icon-192.png', { width: 192, height: 192 });
 await shot(iconPage(512), 'icon-512.png', { width: 512, height: 512 });
-// Maskable icon: full-bleed square; the spark already sits inside the 80% safe zone.
-await shot(iconPage(512, { rounded: false }), 'icon-maskable-512.png', { width: 512, height: 512 }, { transparent: false });
+// Maskable icon: full-bleed square with the glyph scaled into the central 80% safe zone.
+await shot(iconPage(512, { rounded: false, scale: 0.78 }), 'icon-maskable-512.png', { width: 512, height: 512 }, { transparent: false });
 await shot(ogPage, 'og-image.png', { width: 1200, height: 630 }, { transparent: false });
 await browser.close();
 
-await writeFile(path.join(pub, 'favicon.svg'), mark('favicon').trim() + '\n');
+await writeFile(path.join(pub, 'favicon.svg'), mark().trim() + '\n');
 console.log('wrote favicon.svg');
 console.log('Combine favicon-16/32/48.png into favicon.ico with ImageMagick: convert favicon-16.png favicon-32.png favicon-48.png favicon.ico');

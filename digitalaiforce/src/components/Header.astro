@@ -39,12 +39,10 @@ const servicesActive = path.startsWith('/services/');
             <div class="mega__panel">
               <ul class="mega__grid" role="list">
                 {
-                  services.map((s) => (
+                  services.map((s, i) => (
                     <li>
                       <a href={serviceUrl(s.slug)} class="mega__link" aria-current={path === serviceUrl(s.slug) ? 'page' : undefined}>
-                        <span class="icon-badge icon-badge--sm">
-                          <Icon name={s.icon} />
-                        </span>
+                        <span class="mega__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                         <span class="mega__text">
                           <span class="mega__title">{s.navLabel}</span>
                           <span class="mega__desc">{s.tagline}</span>
@@ -55,7 +53,7 @@ const servicesActive = path.startsWith('/services/');
                 }
               </ul>
               <div class="mega__aside">
-                <p class="mega__aside-title">Not sure where to start?</p>
+                <p class="mega__aside-title">Not sure where to <em>start?</em></p>
                 <p class="mega__aside-text">Book a free strategy call and get a clear, no-pressure plan for growing your business online.</p>
                 <a href="/contact/" class="btn btn--primary btn--sm">
                   Book a free call <Icon name="arrow-right" class="icon--move" />
@@ -99,10 +97,10 @@ const servicesActive = path.startsWith('/services/');
           </summary>
           <ul role="list" class="mobile-menu__sub">
             {
-              services.map((s) => (
+              services.map((s, i) => (
                 <li>
                   <a href={serviceUrl(s.slug)} aria-current={path === serviceUrl(s.slug) ? 'page' : undefined}>
-                    <Icon name={s.icon} size={20} />
+                    <span class="mobile-menu__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                     {s.navLabel}
                   </a>
                 </li>
@@ -121,6 +119,7 @@ const servicesActive = path.startsWith('/services/');
           <li style={`--i: ${i + 1}`}>
             <a href={l.href} class="mobile-menu__link" aria-current={isActive(l.href) ? 'page' : undefined}>
               {l.label}
+              <Icon name="arrow-up-right" size={22} />
             </a>
           </li>
         ))
@@ -145,8 +144,8 @@ const servicesActive = path.startsWith('/services/');
     inset: 0 0 auto 0;
     z-index: var(--z-header);
     height: var(--header-h);
-    color: var(--on-night);
-    transition: translate 0.45s var(--ease-out);
+    color: var(--ink);
+    transition: translate 0.55s var(--ease-out);
   }
 
   .site-header::before {
@@ -154,20 +153,29 @@ const servicesActive = path.startsWith('/services/');
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgba(7, 10, 31, 0);
+    background: rgba(242, 238, 230, 0);
     border-bottom: 1px solid transparent;
     transition:
       background-color var(--dur) ease,
-      border-color var(--dur) ease,
-      backdrop-filter var(--dur) ease;
+      border-color var(--dur) ease;
   }
 
-  :global(.header-scrolled) .site-header::before,
+  :global(.header-scrolled) .site-header::before {
+    background: rgba(242, 238, 230, 0.86);
+    border-bottom-color: var(--line);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  :global(.menu-open) .site-header {
+    color: var(--on-dark);
+  }
+
   :global(.menu-open) .site-header::before {
-    background: rgba(7, 10, 31, 0.78);
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    backdrop-filter: blur(16px) saturate(150%);
+    background: transparent;
+    border-bottom-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   :global(.header-hidden) .site-header {
@@ -185,7 +193,7 @@ const servicesActive = path.startsWith('/services/');
   .site-header__brand {
     display: inline-flex;
     padding: 6px 0;
-    border-radius: 12px;
+    border-radius: 8px;
   }
 
   .site-header__actions {
@@ -204,7 +212,7 @@ const servicesActive = path.startsWith('/services/');
   .site-nav__list {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
   }
 
   .site-nav__item {
@@ -215,10 +223,9 @@ const servicesActive = path.startsWith('/services/');
   .site-nav__link {
     position: relative;
     padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 0.97rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    color: rgba(241, 243, 255, 0.82);
+    color: var(--ink);
     transition: color var(--dur-fast) ease;
   }
 
@@ -227,21 +234,27 @@ const servicesActive = path.startsWith('/services/');
     position: absolute;
     left: 12px;
     right: 12px;
-    bottom: 4px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--grad-brand);
+    bottom: 6px;
+    height: 1px;
+    background: currentColor;
     transform: scaleX(0);
-    transform-origin: left;
-    transition: transform var(--dur) var(--ease-out);
-  }
-
-  .site-nav__link[aria-current='page'] {
-    color: #fff;
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out);
   }
 
   .site-nav__link[aria-current='page']::after {
     transform: scaleX(1);
+  }
+
+  .site-nav__link[aria-current='page']::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    margin-top: -3px;
+    background: var(--ember);
   }
 
   [data-mega] .site-nav__link {
@@ -257,31 +270,25 @@ const servicesActive = path.startsWith('/services/');
     place-items: center;
     width: 28px;
     height: 28px;
-    border-radius: 8px;
-    color: rgba(241, 243, 255, 0.82);
+    border-radius: 50%;
+    color: var(--ink);
     transition:
       transform var(--dur) var(--ease-out),
-      color var(--dur-fast) ease,
       background-color var(--dur-fast) ease;
   }
 
   [data-mega].is-open .site-nav__toggle {
     transform: rotate(180deg);
-    color: #fff;
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .site-nav__link:hover,
-    .site-nav__toggle:hover {
-      color: #fff;
-    }
-
     .site-nav__link:hover::after {
       transform: scaleX(1);
+      transform-origin: left;
     }
 
     .site-nav__toggle:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(20, 19, 17, 0.07);
     }
   }
 
@@ -291,17 +298,16 @@ const servicesActive = path.startsWith('/services/');
     top: calc(100% - 6px);
     left: 0;
     right: 0;
-    width: min(940px, calc(100vw - 32px));
+    width: min(980px, calc(100vw - 32px));
     margin-inline: auto;
     padding-top: 10px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px) scale(0.985);
-    transform-origin: top center;
+    transform: translateY(12px);
     transition:
       opacity 0.22s ease,
-      transform 0.3s var(--ease-out),
-      visibility 0s linear 0.3s;
+      transform 0.4s var(--ease-out),
+      visibility 0s linear 0.4s;
   }
 
   [data-mega].is-open .mega {
@@ -309,77 +315,78 @@ const servicesActive = path.startsWith('/services/');
     visibility: visible;
     transform: none;
     transition:
-      opacity 0.22s ease,
-      transform 0.35s var(--ease-out),
+      opacity 0.25s ease,
+      transform 0.45s var(--ease-out),
       visibility 0s;
   }
 
   .mega__panel {
     display: grid;
-    grid-template-columns: 1fr 260px;
+    grid-template-columns: 1fr 280px;
     gap: 8px;
-    padding: 10px;
-    border-radius: 22px;
-    background: rgba(11, 16, 48, 0.97);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    box-shadow:
-      0 40px 80px -30px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    padding: 8px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
   }
 
   .mega__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2px;
+    gap: 0 8px;
+    padding: 8px 12px;
   }
 
   .mega__link {
     display: flex;
     gap: 14px;
-    align-items: flex-start;
-    padding: 14px;
-    border-radius: 14px;
-    transition: background-color var(--dur-fast) ease;
+    align-items: baseline;
+    padding: 14px 6px;
+    border-bottom: 1px solid var(--line);
+    transition: padding var(--dur) var(--ease-out);
   }
 
-  .mega__link .icon-badge {
-    --accent: var(--violet-300);
-    --badge-bg: linear-gradient(135deg, rgba(124, 92, 255, 0.25), rgba(34, 211, 238, 0.12));
-    --badge-border: rgba(196, 181, 253, 0.2);
-    transition: transform var(--dur) var(--ease-spring);
+  .mega__grid li:nth-last-child(-n + 2) .mega__link {
+    border-bottom: 0;
+  }
+
+  .mega__num {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--ember-ink);
   }
 
   .mega__text {
     display: grid;
-    gap: 2px;
+    gap: 3px;
   }
 
   .mega__title {
-    font-family: var(--font-display);
     font-weight: 600;
     font-size: 0.98rem;
-    color: #fff;
+    letter-spacing: -0.01em;
+    color: var(--ink);
   }
 
   .mega__desc {
-    font-size: 0.86rem;
+    font-size: 0.85rem;
     line-height: 1.45;
-    color: var(--on-night-muted);
+    color: var(--ink-2);
   }
 
-  .mega__link[aria-current='page'] {
-    background: rgba(124, 92, 255, 0.14);
+  .mega__link[aria-current='page'] .mega__title {
+    color: var(--ember-ink);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .mega__link:hover {
-      background: rgba(255, 255, 255, 0.05);
+      padding-left: 12px;
     }
 
-    .mega__link:hover .icon-badge {
-      transform: scale(1.08) rotate(-4deg);
+    .mega__link:hover .mega__title {
+      color: var(--ember-ink);
     }
   }
 
@@ -387,33 +394,39 @@ const servicesActive = path.startsWith('/services/');
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
-    padding: 22px;
-    border-radius: 16px;
-    background:
-      radial-gradient(120% 90% at 100% 0%, rgba(124, 92, 255, 0.35), transparent 60%),
-      radial-gradient(90% 80% at 0% 100%, rgba(34, 211, 238, 0.18), transparent 60%),
-      rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    gap: 14px;
+    padding: 26px;
+    border-radius: 10px;
+    color: var(--on-dark);
+    background: var(--ink);
   }
 
   .mega__aside-title {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #fff;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--on-dark);
+  }
+
+  .mega__aside-title em {
+    color: var(--ember);
   }
 
   .mega__aside-text {
     font-size: 0.9rem;
-    color: var(--on-night-muted);
-    margin-bottom: 4px;
+    color: var(--on-dark-2);
+    margin-bottom: 6px;
+  }
+
+  .mega__aside .btn {
+    --btn-bg: var(--paper);
+    --btn-fg: var(--ink);
   }
 
   .mega__all {
-    --accent: var(--violet-300);
     font-size: 0.92rem;
     margin-top: auto;
+    color: var(--on-dark) !important;
   }
 
   /* ---------- Menu toggle ---------- */
@@ -422,30 +435,28 @@ const servicesActive = path.startsWith('/services/');
     place-items: center;
     width: 46px;
     height: 46px;
-    border-radius: 14px;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: inherit;
+    border: 1px solid currentColor;
     transition: background-color var(--dur-fast) ease;
   }
 
   .menu-toggle__bars {
     position: relative;
     display: block;
-    width: 20px;
-    height: 12px;
+    width: 18px;
+    height: 8px;
   }
 
   .menu-toggle__bars span {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 2px;
-    border-radius: 2px;
+    height: 1.5px;
     background: currentColor;
     transition:
-      transform 0.35s var(--ease-out),
-      top 0.35s var(--ease-out);
+      transform 0.45s var(--ease-out),
+      top 0.45s var(--ease-out);
   }
 
   .menu-toggle__bars span:first-child {
@@ -453,21 +464,26 @@ const servicesActive = path.startsWith('/services/');
   }
 
   .menu-toggle__bars span:last-child {
-    top: 10px;
+    top: 6.5px;
   }
 
   .menu-toggle[aria-expanded='true'] .menu-toggle__bars span:first-child {
-    top: 5px;
+    top: 3.25px;
     transform: rotate(45deg);
   }
 
   .menu-toggle[aria-expanded='true'] .menu-toggle__bars span:last-child {
-    top: 5px;
+    top: 3.25px;
     transform: rotate(-45deg);
   }
 
   .site-header__cta {
     display: none;
+  }
+
+  :global(.menu-open) .site-header__cta {
+    --btn-bg: var(--paper);
+    --btn-fg: var(--ink);
   }
 
   @media (min-width: 560px) {
@@ -482,7 +498,7 @@ const servicesActive = path.startsWith('/services/');
     }
 
     .site-header__actions {
-      margin-left: 8px;
+      margin-left: 12px;
     }
 
     .menu-toggle {
@@ -500,32 +516,29 @@ const servicesActive = path.startsWith('/services/');
     padding-top: var(--header-h);
     overflow-y: auto;
     overscroll-behavior: contain;
-    color: var(--on-night);
-    background:
-      radial-gradient(80% 50% at 100% 0%, rgba(124, 92, 255, 0.25), transparent 60%),
-      radial-gradient(70% 40% at 0% 100%, rgba(34, 211, 238, 0.14), transparent 60%),
-      var(--night-950);
-    opacity: 0;
+    color: var(--on-dark);
+    background: var(--ink);
+    clip-path: inset(0 0 100% 0);
     visibility: hidden;
     transition:
-      opacity 0.3s ease,
-      visibility 0s linear 0.3s;
+      clip-path 0.7s var(--ease-in-out),
+      visibility 0s linear 0.7s;
   }
 
   .mobile-menu.is-open {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
     visibility: visible;
     transition:
-      opacity 0.3s ease,
+      clip-path 0.7s var(--ease-in-out),
       visibility 0s;
   }
 
   .mobile-menu__nav {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
     flex: 1;
-    padding-block: 16px max(28px, env(safe-area-inset-bottom));
+    padding-block: 20px max(28px, env(safe-area-inset-bottom));
   }
 
   .mobile-menu__list {
@@ -535,17 +548,17 @@ const servicesActive = path.startsWith('/services/');
   .mobile-menu__list > li,
   .mobile-menu__footer {
     opacity: 0;
-    translate: 0 16px;
+    translate: 0 28px;
     transition:
       opacity 0.4s ease,
-      translate 0.5s var(--ease-out);
+      translate 0.7s var(--ease-out);
   }
 
   .mobile-menu.is-open .mobile-menu__list > li,
   .mobile-menu.is-open .mobile-menu__footer {
     opacity: 1;
     translate: 0 0;
-    transition-delay: calc(var(--i, 0) * 50ms + 80ms);
+    transition-delay: calc(var(--i, 0) * 60ms + 260ms);
   }
 
   .mobile-menu__link,
@@ -553,21 +566,22 @@ const servicesActive = path.startsWith('/services/');
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 60px;
-    padding-block: 14px;
+    min-height: 68px;
+    padding-block: 12px;
     font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: #fff;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: clamp(2.4rem, 9vw, 3.4rem);
+    line-height: 1;
+    color: var(--on-dark);
+    border-bottom: 1px solid var(--dark-line);
+  }
+
+  .mobile-menu__link :global(.icon) {
+    color: var(--on-dark-2);
   }
 
   .mobile-menu__link[aria-current='page'] {
-    background: var(--grad-text-on-dark);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-style: italic;
+    color: var(--ember);
   }
 
   .mobile-menu__group summary {
@@ -580,6 +594,7 @@ const servicesActive = path.startsWith('/services/');
   }
 
   .mobile-menu__group summary :global(.icon) {
+    color: var(--on-dark-2);
     transition: transform var(--dur) var(--ease-out);
   }
 
@@ -589,36 +604,34 @@ const servicesActive = path.startsWith('/services/');
 
   .mobile-menu__sub {
     display: grid;
-    gap: 2px;
-    padding: 10px 0 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 0 16px;
+    border-bottom: 1px solid var(--dark-line);
   }
 
   .mobile-menu__sub a {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: 48px;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 1.02rem;
-    color: var(--on-night);
+    align-items: baseline;
+    gap: 14px;
+    min-height: 46px;
+    padding: 10px 0;
+    font-size: 1.05rem;
+    color: var(--on-dark);
   }
 
-  .mobile-menu__sub a :global(.icon) {
-    color: var(--violet-300);
+  .mobile-menu__num {
+    font-family: var(--font-display);
+    color: var(--ember);
     flex: none;
   }
 
-  .mobile-menu__sub a[aria-current='page'],
-  .mobile-menu__sub a:active {
-    background: rgba(255, 255, 255, 0.06);
+  .mobile-menu__sub a[aria-current='page'] {
+    color: var(--ember);
   }
 
   .mobile-menu__all {
-    font-family: var(--font-display);
+    align-items: center !important;
     font-weight: 600;
-    color: var(--violet-300) !important;
+    color: var(--ember) !important;
   }
 
   .mobile-menu__footer {
@@ -627,13 +640,19 @@ const servicesActive = path.startsWith('/services/');
     margin-top: auto;
   }
 
+  .mobile-menu__footer .btn {
+    --btn-bg: var(--ember);
+    --btn-fg: var(--ink);
+    --btn-hover-bg: var(--paper);
+  }
+
   .mobile-menu__email {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     min-height: 44px;
-    color: var(--on-night-muted);
+    color: var(--on-dark-2);
   }
 
   @media (min-width: 1080px) {

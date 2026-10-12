@@ -49,15 +49,11 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
     breadcrumbNode(path, crumbs),
   ]}
 >
-  <header class="post-hero theme-dark">
-    <div class="post-hero__bg" aria-hidden="true">
-      <div class="bg-grid"></div>
-      <div class="orb orb--violet post-hero__orb"></div>
-    </div>
-    <div class="container container--narrow post-hero__inner">
+  <header class="post-hero">
+    <div class="container post-hero__inner">
       <div class="enter"><Breadcrumbs crumbs={crumbs} /></div>
       <p class="eyebrow enter" style="--d: 1">{post.data.category}</p>
-      <h1 class="enter" style="--d: 2">{post.data.title}</h1>
+      <h1 data-split>{post.data.title}</h1>
       <p class="lead enter" style="--d: 3">{post.data.description}</p>
       <p class="post-hero__meta enter" style="--d: 4">
         <span><Icon name="calendar-days" size={16} /> <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>
@@ -67,16 +63,16 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
     </div>
   </header>
 
-  <div class="section theme-white post-body">
+  <div class="section post-body">
     <div class="container post-layout">
-      <article class="prose post-content">
+      <article class="prose prose--dropcap post-content">
         <Content />
       </article>
 
       <aside class="post-aside" aria-label="Article tools">
         {
           toc.length > 0 && (
-            <nav class="toc card" aria-label="On this page">
+            <nav class="toc" aria-label="On this page" data-lenis-prevent>
               <p class="toc__title">On this page</p>
               <ol role="list">
                 {toc.map((h) => (
@@ -91,8 +87,8 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
         {
           service && (
             <div class="aside-cta card theme-dark">
-              <span class="icon-badge icon-badge--sm">
-                <Icon name={service.icon} />
+              <span class="aside-cta__icon" aria-hidden="true">
+                <Icon name={service.icon} size={22} />
               </span>
               <p class="aside-cta__title">Want expert help with {service.name}?</p>
               <p>{service.summary}</p>
@@ -113,7 +109,7 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
           <div class="section-head section-head--split">
             <div data-reveal>
               <p class="eyebrow">Keep reading</p>
-              <h2 id="more-title">
+              <h2 id="more-title" data-split>
                 More <span class="text-gradient">guides</span>
               </h2>
             </div>
@@ -135,29 +131,17 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
 <style>
   .post-hero {
     position: relative;
-    overflow: clip;
-    isolation: isolate;
-    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 72px));
+    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 88px));
     padding-bottom: clamp(48px, 6vw, 80px);
+    border-bottom: 1px solid var(--line);
   }
 
-  .post-hero__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-  }
-
-  .post-hero__orb {
-    width: 560px;
-    height: 560px;
-    top: -260px;
-    right: -100px;
-    opacity: 0.5;
-    animation: drift 22s var(--ease-in-out) infinite;
+  .post-hero__inner {
+    max-width: calc(1080px + var(--gutter) * 2);
   }
 
   .post-hero :global(.crumbs) {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .post-hero :global(.crumbs li:last-child) {
@@ -165,21 +149,24 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
   }
 
   .post-hero h1 {
-    font-size: clamp(2rem, 4.4vw, 3.3rem);
-    color: #fff;
+    font-size: clamp(2.6rem, 6vw, 5.4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
   }
 
   .post-hero .lead {
-    margin-top: 18px;
+    margin-top: 26px;
   }
 
   .post-hero__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 22px;
-    margin-top: 26px;
-    font-size: 0.92rem;
-    color: var(--on-night-muted);
+    gap: 10px 26px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--ink-2);
   }
 
   .post-hero__meta span {
@@ -189,11 +176,11 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
   }
 
   .post-hero__meta :global(.icon) {
-    color: var(--violet-300);
+    color: var(--ember-ink);
   }
 
   .post-body {
-    padding-top: clamp(48px, 6vw, 72px);
+    padding-top: clamp(48px, 6vw, 80px);
   }
 
   .post-layout {
@@ -214,70 +201,77 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
     }
   }
 
-  .post-content :global(h2) {
-    scroll-margin-top: calc(var(--header-h) + 24px);
-  }
-
   .post-aside {
     display: grid;
-    gap: 20px;
+    gap: 24px;
   }
 
   .toc {
-    padding: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink);
   }
 
   .toc__title {
-    margin-bottom: 12px;
-    font-family: var(--font-display);
-    font-size: 0.8rem;
+    margin-bottom: 10px;
+    font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--violet-600);
+    color: var(--ink);
   }
 
   .toc ol {
     display: grid;
-    gap: 2px;
     margin: 0;
     padding: 0;
   }
 
   .toc a {
+    position: relative;
     display: block;
-    padding: 7px 10px;
-    border-radius: 10px;
+    padding: 8px 0 8px 16px;
     font-size: 0.93rem;
     line-height: 1.4;
-    color: var(--ink-muted);
+    color: var(--ink-2);
+    border-left: 1px solid var(--line);
     transition:
       color var(--dur-fast) ease,
-      background-color var(--dur-fast) ease;
+      border-color var(--dur-fast) ease;
   }
 
   .toc a:hover,
   .toc a.is-current {
     color: var(--ink);
-    background: var(--paper);
+    border-left-color: var(--ember);
+  }
+
+  .toc a.is-current {
+    font-weight: 600;
   }
 
   .post-aside .aside-cta {
     display: grid;
     gap: 12px;
     justify-items: start;
-    background:
-      radial-gradient(100% 120% at 100% 0%, rgba(124, 92, 255, 0.5), transparent 60%),
-      var(--night-900);
-    border-color: transparent;
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .aside-cta__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--ink);
+    background: var(--ember);
   }
 
   .aside-cta .aside-cta__title {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.15rem;
-    line-height: 1.25;
-    color: #fff;
+    font-size: 1.7rem;
+    line-height: 1.05;
+    color: var(--on-dark);
   }
 
   .aside-cta p:not(.aside-cta__title) {
@@ -286,13 +280,13 @@ const title = `${post.data.seoTitle ?? post.data.title} | Digital AI Force`;
 
   .more {
     display: grid;
-    gap: 24px;
+    gap: clamp(40px, 5vw, 64px) clamp(24px, 3vw, 40px);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   }
 
   @media (min-width: 1080px) {
     .toc {
-      max-height: calc(100vh - var(--header-h) - 220px);
+      max-height: calc(100vh - var(--header-h) - 260px);
       overflow-y: auto;
       overscroll-behavior: contain;
     }

@@ -69,38 +69,3 @@ export function initCounters() {
     io.observe(el);
   }
 }
-
-/** Fills the process timeline as the visitor scrolls through it. */
-export function initProcess() {
-  const blocks = Array.from(document.querySelectorAll<HTMLElement>('[data-process]'));
-  if (!blocks.length) return;
-
-  const reduce = prefersReducedMotion();
-  let ticking = false;
-
-  const update = () => {
-    const vh = window.innerHeight;
-    for (const block of blocks) {
-      const steps = Array.from(block.querySelectorAll<HTMLElement>('[data-step]'));
-      const rect = block.getBoundingClientRect();
-      const progress = reduce ? 1 : Math.min(1, Math.max(0, (vh * 0.7 - rect.top) / (rect.height || 1)));
-      block.style.setProperty('--progress', progress.toFixed(3));
-      steps.forEach((step, i) => {
-        const threshold = steps.length > 1 ? i / (steps.length - 1) : 0;
-        step.classList.toggle('is-active', progress >= threshold * 0.9 && progress > 0);
-      });
-    }
-    ticking = false;
-  };
-
-  const onScroll = () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(update);
-    }
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  update();
-}

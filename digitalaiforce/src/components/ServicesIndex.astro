@@ -1,0 +1,198 @@
+---
+/** Editorial, numbered service index. Each row is one link with an ink fill that sweeps in on hover. */
+import Icon from './Icon.astro';
+import { services, serviceUrl } from '../data/services';
+
+interface Props {
+  /** Heading level for row titles (h3 under a section h2 by default). */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<ol class="sidx" role="list">
+  {
+    services.map((s, i) => (
+      <li class="sidx__row" data-reveal style={`--i: ${i % 3}`}>
+        <span class="sidx__num" aria-hidden="true">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <Heading class="sidx__title">
+          <a href={serviceUrl(s.slug)} class="stretched-link">
+            {s.name}
+          </a>
+        </Heading>
+        <div class="sidx__body">
+          <p>{s.summary}</p>
+          <ul class="sidx__tags" role="list">
+            {s.highlights.map((h) => (
+              <li>{h}</li>
+            ))}
+          </ul>
+        </div>
+        <span class="sidx__go" aria-hidden="true">
+          <Icon name="arrow-up-right" size={22} strokeWidth={1.75} />
+        </span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .sidx {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .sidx__row {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px 20px;
+    align-items: start;
+    padding: clamp(22px, 3vw, 36px) 4px;
+    border-bottom: 1px solid var(--line-strong);
+    transition: color 0.5s var(--ease-out);
+  }
+
+  /* Ink fill */
+  .sidx__row::before {
+    content: '';
+    position: absolute;
+    inset: -1px -12px;
+    z-index: -1;
+    background: var(--ink);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 0.6s var(--ease-out);
+  }
+
+  .sidx__num {
+    padding-top: 0.4em;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ember-ink);
+    transition: color 0.5s var(--ease-out);
+  }
+
+  .sidx__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    transition:
+      color 0.5s var(--ease-out),
+      translate 0.6s var(--ease-out);
+  }
+
+  .sidx__title a {
+    color: inherit;
+  }
+
+  .sidx__body {
+    grid-column: 2 / -1;
+    display: grid;
+    gap: 14px;
+    max-width: 52ch;
+  }
+
+  .sidx__body p {
+    color: var(--ink-2);
+    transition: color 0.5s var(--ease-out);
+  }
+
+  .sidx__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+  }
+
+  .sidx__tags li {
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition:
+      border-color 0.5s var(--ease-out),
+      color 0.5s var(--ease-out);
+  }
+
+  .sidx__go {
+    grid-column: 3;
+    grid-row: 1;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    transition:
+      background-color 0.5s var(--ease-out),
+      border-color 0.5s var(--ease-out),
+      color 0.5s var(--ease-out),
+      rotate 0.6s var(--ease-out);
+  }
+
+  @media (min-width: 900px) {
+    .sidx__row {
+      grid-template-columns: 70px minmax(0, 1.1fr) minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .sidx__body {
+      grid-column: 3;
+    }
+
+    .sidx__go {
+      grid-column: 4;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sidx__row:hover {
+      color: var(--on-dark);
+    }
+
+    .sidx__row:hover::before {
+      clip-path: inset(0 0 0 0);
+    }
+
+    .sidx__row:hover .sidx__title {
+      color: var(--on-dark);
+      translate: 12px 0;
+    }
+
+    .sidx__row:hover .sidx__num {
+      color: var(--ember);
+    }
+
+    .sidx__row:hover .sidx__body p {
+      color: var(--on-dark-2);
+    }
+
+    .sidx__row:hover .sidx__tags li {
+      border-color: var(--dark-line);
+    }
+
+    .sidx__row:hover .sidx__go {
+      color: var(--ink);
+      background: var(--ember);
+      border-color: var(--ember);
+      rotate: 45deg;
+    }
+  }
+
+  .sidx__row:focus-within {
+    outline: 2px solid var(--ember-ink);
+    outline-offset: 4px;
+  }
+
+  .sidx__row :global(a:focus-visible) {
+    outline: none;
+  }
+</style>

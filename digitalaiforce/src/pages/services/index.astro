@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
-import ServicesBento from '../../components/ServicesBento.astro';
+import ServicesIndex from '../../components/ServicesIndex.astro';
 import ProcessSteps from '../../components/ProcessSteps.astro';
 import CTABand from '../../components/CTABand.astro';
 import Icon from '../../components/Icon.astro';
@@ -110,8 +110,11 @@ const itemList = {
 
   <section class="section" aria-labelledby="all-services-title">
     <div class="container">
-      <h2 id="all-services-title" class="sr-only">All services</h2>
-      <ServicesBento />
+      <div class="hub-head">
+        <h2 id="all-services-title" data-split>Eight services, <span class="text-gradient">one team</span></h2>
+        <p class="lead" data-reveal>Pick one or combine a few — everything is planned to work together.</p>
+      </div>
+      <ServicesIndex />
     </div>
   </section>
 
@@ -119,7 +122,7 @@ const itemList = {
     <div class="container">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">Service finder</p>
-        <h2 id="finder-title">What’s your <span class="text-gradient">#1 goal</span> right now?</h2>
+        <h2 id="finder-title" data-split>What’s your <span class="text-gradient">#1 goal</span> right now?</h2>
         <p class="lead">Pick a goal and we’ll show you the services that usually make the biggest difference.</p>
       </div>
 
@@ -137,7 +140,7 @@ const itemList = {
                 class="finder__goal"
                 data-tab
               >
-                <Icon name={g.icon} size={20} />
+                <Icon name={g.icon} size={18} />
                 {g.label}
               </button>
             ))
@@ -161,9 +164,9 @@ const itemList = {
                   const s = getService(slug)!;
                   return (
                     <li class="finder__pick" style={`--i: ${j}`}>
-                      <span class="finder__rank">{j === 0 ? 'Start here' : `Then add #${j + 1}`}</span>
-                      <span class="icon-badge icon-badge--sm">
-                        <Icon name={s.icon} />
+                      <span class="finder__rank">
+                        <span class="finder__n" aria-hidden="true">{String(j + 1).padStart(2, '0')}</span>
+                        {j === 0 ? 'Start here' : `Then add #${j + 1}`}
                       </span>
                       <a href={serviceUrl(s.slug)} class="finder__name stretched-link">
                         {s.name}
@@ -185,33 +188,34 @@ const itemList = {
       <div class="section-head section-head--split">
         <div data-reveal>
           <p class="eyebrow">Why one partner</p>
-          <h2 id="why-title">Better results when everything <span class="text-gradient">works together</span></h2>
+          <h2 id="why-title" data-split>Better results when everything <span class="text-gradient">works together</span></h2>
         </div>
         <p class="lead" data-reveal style="--i: 1">
           Small businesses lose leads in the gaps between vendors. We close those gaps with one strategy, one team and one clear report.
         </p>
       </div>
-      <div class="grid grid-4">
+      <ul class="ruled-grid" role="list">
         {
           reasons.map((r, i) => (
-            <article class="card lift reason" data-reveal style={`--i: ${i}`}>
-              <span class="icon-badge">
+            <li data-reveal style={`--i: ${i}`}>
+              <div class="ruled__top">
+                <span class="ruled__num">{String(i + 1).padStart(2, '0')}</span>
                 <Icon name={r.icon} />
-              </span>
+              </div>
               <h3>{r.title}</h3>
               <p>{r.text}</p>
-            </article>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </section>
 
   <section class="section theme-white" aria-labelledby="process-title">
     <div class="container">
-      <div class="section-head section-head--center" data-reveal>
+      <div class="section-head" data-reveal>
         <p class="eyebrow">How it works</p>
-        <h2 id="process-title">Simple process. <span class="text-gradient">Serious results.</span></h2>
+        <h2 id="process-title" data-split>Simple process. <span class="text-gradient">Serious results.</span></h2>
       </div>
       <ProcessSteps steps={processSteps} />
     </div>
@@ -222,22 +226,25 @@ const itemList = {
 
 <style>
   .hub-hero__ctas {
-    margin-top: 32px;
+    margin-top: 36px;
   }
 
-  .reason {
+  .hub-head {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px 48px;
+    margin-bottom: clamp(32px, 4vw, 56px);
   }
 
-  .reason h3 {
-    margin: 4px 0 0;
+  .hub-head .lead {
+    max-width: 380px;
   }
 
   /* ---------- Goal finder ---------- */
   .finder {
-    max-width: 980px;
+    max-width: 1080px;
     margin-inline: auto;
   }
 
@@ -246,7 +253,7 @@ const itemList = {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
   }
 
   .finder__goal {
@@ -254,36 +261,27 @@ const itemList = {
     align-items: center;
     gap: 10px;
     min-height: 50px;
-    padding: 10px 18px;
+    padding: 10px 20px;
     border-radius: 999px;
-    font-family: var(--font-display);
     font-weight: 600;
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     color: var(--ink);
-    background: var(--paper);
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-strong);
     transition:
       color var(--dur) ease,
       background-color var(--dur) ease,
       border-color var(--dur) ease,
-      transform var(--dur) var(--ease-out),
-      box-shadow var(--dur) ease;
-  }
-
-  .finder__goal :global(.icon) {
-    color: var(--violet-600);
-    transition: color var(--dur) ease;
+      transform var(--dur) var(--ease-out);
   }
 
   .finder__goal[aria-selected='true'] {
-    color: #fff;
-    background: var(--grad-cta);
-    border-color: transparent;
-    box-shadow: var(--shadow-glow);
+    color: var(--paper);
+    background: var(--ink);
+    border-color: var(--ink);
   }
 
   .finder__goal[aria-selected='true'] :global(.icon) {
-    color: #fff;
+    color: var(--ember);
   }
 
   .finder__goal:active {
@@ -292,32 +290,27 @@ const itemList = {
 
   @media (hover: hover) and (pointer: fine) {
     .finder__goal:not([aria-selected='true']):hover {
-      border-color: var(--violet-500);
-      transform: translateY(-2px);
+      border-color: var(--ink);
     }
   }
 
-  .finder__panel {
-    padding: clamp(22px, 3vw, 32px);
-    border-radius: var(--radius-xl);
-    background: var(--paper);
-    border: 1px solid var(--line);
-  }
-
   .finder__panel:not([hidden]) {
-    animation: enter-up 0.5s var(--ease-out);
+    animation: enter-up 0.6s var(--ease-out);
   }
 
   .finder__text {
-    margin-bottom: 20px;
-    font-size: 1.08rem;
+    max-width: 30ch;
+    margin: 0 auto 36px;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    line-height: 1.1;
     text-align: center;
-    color: var(--ink-muted);
+    color: var(--ink);
   }
 
   .finder__picks {
     display: grid;
-    gap: 14px;
+    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -334,37 +327,50 @@ const itemList = {
     display: grid;
     gap: 10px;
     align-content: start;
-    padding: 22px;
+    padding: 26px;
     border-radius: var(--radius-lg);
     background: var(--surface);
     border: 1px solid var(--line);
-    animation: enter-up 0.6s var(--ease-out) both;
+    animation: enter-up 0.7s var(--ease-out) both;
     animation-delay: calc(var(--i) * 90ms);
     transition:
-      transform var(--dur) var(--ease-out),
-      box-shadow var(--dur) var(--ease-out),
-      border-color var(--dur) ease;
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
   }
 
   .finder__pick:first-child {
-    border-color: rgba(124, 92, 255, 0.45);
-    box-shadow: 0 20px 40px -26px rgba(91, 61, 245, 0.6);
+    background: var(--ember);
+    border-color: var(--ember);
   }
 
   .finder__rank {
-    font-family: var(--font-display);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 18px;
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--violet-600);
+    color: var(--ink-2);
+  }
+
+  .finder__pick:first-child .finder__rank {
+    color: var(--ink);
+  }
+
+  .finder__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: 0;
   }
 
   .finder__name {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.12rem;
-    letter-spacing: -0.015em;
+    font-size: 1.85rem;
+    line-height: 1.02;
     color: var(--ink);
   }
 
@@ -373,18 +379,22 @@ const itemList = {
   }
 
   .finder__pick:has(.finder__name:focus-visible) {
-    outline: 2px solid var(--violet-500);
+    outline: 2px solid var(--ink);
     outline-offset: 3px;
   }
 
   .finder__tag {
     font-size: 0.94rem;
-    color: var(--ink-muted);
+    color: var(--ink-2);
+  }
+
+  .finder__pick:first-child .finder__tag {
+    color: rgba(20, 19, 17, 0.82);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .finder__pick:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
     }
   }

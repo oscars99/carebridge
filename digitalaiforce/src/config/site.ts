@@ -65,6 +65,6 @@ export const site: SiteConfig = {
 
   /** Default social share image (public/og-image.png, 1200×630). */
   ogImage: '/og-image.png',
-  themeColor: '#070a1f',
+  themeColor: '#f2eee6',
   locale: 'en_US',
 };

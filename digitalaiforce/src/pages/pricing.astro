@@ -79,7 +79,7 @@ const faqs = [
       <div class="section-head section-head--split">
         <div data-reveal>
           <p class="eyebrow">Custom solutions</p>
-          <h2 id="custom-title">Apps, AI &amp; branding — <span class="text-gradient">quoted to fit</span></h2>
+          <h2 id="custom-title" data-split>Apps, AI &amp; branding — <span class="text-gradient">quoted to fit</span></h2>
         </div>
         <p class="lead" data-reveal style="--i: 1">
           These projects vary widely in scope, so we quote them individually after a free discovery call — always as a fixed price.
@@ -88,19 +88,18 @@ const faqs = [
       <div class="grid grid-3">
         {
           custom.map((s, i) => (
-            <article class="card spotlight lift custom" data-reveal style={`--i: ${i}`}>
-              <span class="icon-badge">
+            <article class="card lift custom" data-reveal style={`--i: ${i}`}>
+              <div class="custom__top">
+                <span class="custom__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <Icon name={s.icon} />
-              </span>
+              </div>
               <h3>
                 <a href={serviceUrl(s.slug)} class="stretched-link">
                   {s.name}
                 </a>
               </h3>
               <p>{s.summary}</p>
-              <p class="custom__note">
-                <Icon name="badge-dollar-sign" size={18} /> {s.pricingNote}
-              </p>
+              <p class="custom__note">{s.pricingNote}</p>
             </article>
           ))
         }
@@ -110,21 +109,20 @@ const faqs = [
 
   <section class="section" aria-labelledby="included-title">
     <div class="container">
-      <div class="section-head section-head--center" data-reveal>
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Always included</p>
-        <h2 id="included-title">Every plan comes with <span class="text-gradient">peace of mind</span></h2>
+        <h2 id="included-title" data-split>Every plan comes with <span class="text-gradient">peace of mind</span></h2>
       </div>
-      <ul class="included" role="list">
+      <ul class="ruled-grid ruled-grid--3" role="list">
         {
           included.map((item, i) => (
-            <li class="included__item" data-reveal style={`--i: ${i % 3}`}>
-              <span class="icon-badge icon-badge--sm">
+            <li data-reveal style={`--i: ${i % 3}`}>
+              <div class="ruled__top">
+                <span class="ruled__num">{String(i + 1).padStart(2, '0')}</span>
                 <Icon name={item.icon} />
-              </span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
               </div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
             </li>
           ))
         }
@@ -136,7 +134,7 @@ const faqs = [
     <div class="container container--narrow">
       <div class="section-head section-head--center" data-reveal>
         <p class="eyebrow">Pricing FAQ</p>
-        <h2 id="pricing-faq-title">Good questions to <span class="text-gradient">ask before you buy</span></h2>
+        <h2 id="pricing-faq-title" data-split>Good questions to <span class="text-gradient">ask before you buy</span></h2>
       </div>
       <FAQ faqs={faqs} />
     </div>
@@ -152,7 +150,7 @@ const faqs = [
 
 <style>
   .pricing-page {
-    padding-top: clamp(48px, 6vw, 80px);
+    padding-top: clamp(56px, 7vw, 96px);
   }
 
   .custom {
@@ -161,8 +159,26 @@ const faqs = [
     gap: 14px;
   }
 
+  .custom__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .custom__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ember-ink);
+  }
+
   .custom h3 {
-    margin: 4px 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 2.4vw, 2.1rem);
+    line-height: 1.02;
+    margin: 0;
   }
 
   .custom h3 a:focus-visible {
@@ -170,47 +186,15 @@ const faqs = [
   }
 
   .custom:has(.stretched-link:focus-visible) {
-    outline: 2px solid var(--violet-500);
+    outline: 2px solid var(--ember-ink);
     outline-offset: 3px;
   }
 
   .card .custom__note {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
     margin-top: auto;
-    padding-top: 14px;
+    padding-top: 16px;
     border-top: 1px solid var(--line);
-    font-family: var(--font-display);
     font-weight: 600;
     color: var(--ink);
-  }
-
-  .custom__note :global(.icon) {
-    color: var(--violet-600);
-  }
-
-  .included {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-    gap: 28px 32px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .included__item {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .included__item h3 {
-    font-size: 1.08rem;
-    margin-bottom: 4px;
-  }
-
-  .included__item p {
-    color: var(--text-muted);
-    font-size: 0.97rem;
   }
 </style>

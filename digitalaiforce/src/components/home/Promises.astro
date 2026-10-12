@@ -2,13 +2,12 @@
 import { promises } from '../../data/home';
 ---
 
-<section class="promises theme-dark" aria-labelledby="promises-title">
-  <div class="promises__glow" aria-hidden="true"></div>
+<section class="promises" aria-labelledby="promises-title">
   <div class="container">
     <div class="promises__inner">
       <div class="promises__intro" data-reveal>
         <p class="eyebrow">Our promise</p>
-        <h2 id="promises-title">Built for performance. <span class="text-gradient">Backed by commitments.</span></h2>
+        <h2 id="promises-title" data-split>Built for performance. <span class="text-gradient">Backed by commitments.</span></h2>
       </div>
       <dl class="promises__grid">
         {
@@ -35,93 +34,86 @@ import { promises } from '../../data/home';
 <style>
   .promises {
     position: relative;
-    overflow: hidden;
-    padding-block: clamp(64px, 8vw, 104px);
-    background:
-      radial-gradient(60% 120% at 0% 0%, rgba(124, 92, 255, 0.35), transparent 60%),
-      radial-gradient(50% 120% at 100% 100%, rgba(34, 211, 238, 0.22), transparent 60%),
-      var(--night-900);
-  }
-
-  .promises__glow {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 40%, transparent);
-    mask-image: linear-gradient(180deg, transparent, #000 40%, transparent);
-    pointer-events: none;
+    padding-block: var(--section-y);
+    background: var(--bg);
   }
 
   .promises__inner {
-    position: relative;
     display: grid;
-    gap: 40px;
-  }
-
-  @media (min-width: 1080px) {
-    .promises__inner {
-      grid-template-columns: 0.8fr 1.2fr;
-      align-items: center;
-      gap: 64px;
-    }
+    gap: clamp(40px, 5vw, 72px);
   }
 
   .promises__intro h2 {
-    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    max-width: 16ch;
   }
 
   .promises__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 0;
+    border-top: 1px solid var(--line-strong);
   }
 
-  @media (min-width: 720px) {
+  @media (min-width: 960px) {
     .promises__grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media (min-width: 1080px) {
-    .promises__grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
   .promises__item {
-    padding: 22px 20px;
-    border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px clamp(14px, 2vw, 28px) 28px;
+    border-bottom: 1px solid var(--line-strong);
   }
 
-  .promises__item dd {
-    margin: 0;
+  .promises__item:not(:nth-child(2n + 1)) {
+    border-left: 1px solid var(--line-strong);
+  }
+
+  @media (min-width: 960px) {
+    .promises__item {
+      border-bottom: 0;
+    }
+
+    .promises__item:not(:first-child) {
+      border-left: 1px solid var(--line-strong);
+    }
+  }
+
+  .promises__grid {
+    counter-reset: promise;
+  }
+
+  .promises__item {
+    counter-increment: promise;
+  }
+
+  .promises__item::before {
+    content: '(' counter(promise, decimal-leading-zero) ')';
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
   }
 
   .promises__value {
+    margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4.2vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    font-size: clamp(3.4rem, 7.4vw, 6.6rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--ink);
     font-variant-numeric: tabular-nums;
-    background: var(--grad-text-on-dark);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    white-space: nowrap;
   }
 
   .promises__label {
-    margin-top: 10px !important;
-    font-size: 0.92rem;
-    line-height: 1.45;
-    color: var(--on-night-muted);
+    margin: 0;
+    max-width: 24ch;
+    font-size: 0.98rem;
+    color: var(--ink-2);
   }
 </style>
